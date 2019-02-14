@@ -486,8 +486,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_etharp_debug
 #ifndef ETHARP_DEBUG
-//#define ETHARP_DEBUG LWIP_DBG_OFF
-#define ETHARP_DEBUG LWIP_DBG_ON
+#define ETHARP_DEBUG LWIP_DBG_OFF
+//#define ETHARP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Netif Debug option
@@ -496,8 +496,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_netif_debug
 #ifndef NETIF_DEBUG
-//#define NETIF_DEBUG LWIP_DBG_OFF
-#define NETIF_DEBUG LWIP_DBG_ON
+#define NETIF_DEBUG LWIP_DBG_OFF
+//#define NETIF_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Pbuf Debug option
@@ -506,8 +506,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_api_lib_debug
 #ifndef API_LIB_DEBUG
-//#define API_LIB_DEBUG LWIP_DBG_OFF
-#define API_LIB_DEBUG LWIP_DBG_ON
+#define API_LIB_DEBUG LWIP_DBG_OFF
+//#define API_LIB_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Pbuf Debug option
@@ -516,8 +516,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_pbuf_debug
 #ifndef PBUF_DEBUG
-//#define PBUF_DEBUG LWIP_DBG_OFF
-#define PBUF_DEBUG LWIP_DBG_ON
+#define PBUF_DEBUG LWIP_DBG_OFF
+//#define PBUF_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> API message Debug option
@@ -526,8 +526,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_api_msg_debug
 #ifndef API_MSG_DEBUG
-//#define API_MSG_DEBUG LWIP_DBG_OFF
-#define API_MSG_DEBUG LWIP_DBG_ON
+#define API_MSG_DEBUG LWIP_DBG_OFF
+//#define API_MSG_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Socket Debug option
@@ -536,8 +536,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_sockets_debug
 #ifndef SOCKETS_DEBUG
-//#define SOCKETS_DEBUG LWIP_DBG_OFF
-#define SOCKETS_DEBUG LWIP_DBG_ON
+#define SOCKETS_DEBUG LWIP_DBG_OFF
+//#define SOCKETS_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> ICMP Debug option
@@ -546,8 +546,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_icmp_debug
 #ifndef ICMP_DEBUG
-//#define ICMP_DEBUG LWIP_DBG_OFF
-#define ICMP_DEBUG LWIP_DBG_ON
+#define ICMP_DEBUG LWIP_DBG_OFF
+//#define ICMP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> IGMP message Debug option
@@ -565,8 +565,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_inet_debug
 #ifndef INET_DEBUG
-//#define INET_DEBUG LWIP_DBG_OFF
-#define INET_DEBUG LWIP_DBG_ON
+#define INET_DEBUG LWIP_DBG_OFF
+//#define INET_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> IP Frag message Debug option
@@ -575,8 +575,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_ip_reass_debug
 #ifndef IP_REASS_DEBUG
-//#define IP_REASS_DEBUG LWIP_DBG_OFF
-#define IP_REASS_DEBUG LWIP_DBG_ON
+#define IP_REASS_DEBUG LWIP_DBG_OFF
+//#define IP_REASS_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> IP message Debug option
@@ -585,8 +585,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_ip_debug
 #ifndef IP_DEBUG
-//#define IP_DEBUG LWIP_DBG_OFF
-#define IP_DEBUG LWIP_DBG_ON
+#define IP_DEBUG LWIP_DBG_OFF
+//#define IP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> RAW message Debug option
@@ -595,8 +595,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_raw_debug
 #ifndef RAW_DEBUG
-//#define RAW_DEBUG LWIP_DBG_OFF
-#define RAW_DEBUG LWIP_DBG_ON
+#define RAW_DEBUG LWIP_DBG_OFF
+//#define RAW_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> MEM message Debug option
@@ -605,8 +605,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_mem_debug
 #ifndef MEM_DEBUG
-//#define MEM_DEBUG LWIP_DBG_OFF
-#define MEM_DEBUG LWIP_DBG_ON
+#define MEM_DEBUG LWIP_DBG_OFF
+//#define MEM_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> MEMP message Debug option
@@ -615,8 +615,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_memp_debug
 #ifndef MEMP_DEBUG
-//#define MEMP_DEBUG LWIP_DBG_OFF
-#define MEMP_DEBUG LWIP_DBG_ON
+#define MEMP_DEBUG LWIP_DBG_OFF
+//#define MEMP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> System message Debug option
@@ -625,8 +625,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_sys_debug
 #ifndef SYS_DEBUG
-//#define SYS_DEBUG LWIP_DBG_OFF
-#define SYS_DEBUG LWIP_DBG_ON
+#define SYS_DEBUG LWIP_DBG_OFF
+//#define SYS_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Timer message Debug option
@@ -645,8 +645,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_debug
 #ifndef TCP_DEBUG
-//#define TCP_DEBUG LWIP_DBG_OFF
-#define TCP_DEBUG LWIP_DBG_ON
+#define TCP_DEBUG LWIP_DBG_OFF
+//#define TCP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP input Debug option
@@ -655,8 +655,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_input_debug
 #ifndef TCP_INPUT_DEBUG
-//#define TCP_INPUT_DEBUG LWIP_DBG_OFF
-#define TCP_INPUT_DEBUG LWIP_DBG_ON
+#define TCP_INPUT_DEBUG LWIP_DBG_OFF
+//#define TCP_INPUT_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP in for fast retransmit Debug option
@@ -665,8 +665,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_fr_debug
 #ifndef TCP_FR_DEBUG
-//#define TCP_FR_DEBUG LWIP_DBG_OFF
-#define TCP_FR_DEBUG LWIP_DBG_ON
+#define TCP_FR_DEBUG LWIP_DBG_OFF
+//#define TCP_FR_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP for retransmit Debug option
@@ -675,8 +675,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_rto_debug
 #ifndef TCP_RTO_DEBUG
-//#define TCP_RTO_DEBUG LWIP_DBG_OFF
-#define TCP_RTO_DEBUG LWIP_DBG_ON
+#define TCP_RTO_DEBUG LWIP_DBG_OFF
+//#define TCP_RTO_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP congestion window Debug option
@@ -703,8 +703,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_output_debug
 #ifndef TCP_OUTPUT_DEBUG
-//#define TCP_OUTPUT_DEBUG LWIP_DBG_OFF
-#define TCP_OUTPUT_DEBUG LWIP_DBG_ON
+#define TCP_OUTPUT_DEBUG LWIP_DBG_OFF
+//#define TCP_OUTPUT_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP RST Debug option
@@ -731,8 +731,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_udp_debug
 #ifndef UDP_DEBUG
-//#define UDP_DEBUG LWIP_DBG_OFF
-#define UDP_DEBUG LWIP_DBG_ON
+#define UDP_DEBUG LWIP_DBG_OFF
+//#define UDP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP/ip Debug option
@@ -741,7 +741,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcpip_debug
 #ifndef TCPIP_DEBUG
-#define TCPIP_DEBUG LWIP_DBG_ON
+//#define TCPIP_DEBUG LWIP_DBG_ON
+#define TCPIP_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> PPP Debug option
@@ -778,8 +779,8 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_autoip_debug
 #ifndef AUTOIP_DEBUG
-//#define AUTOIP_DEBUG LWIP_DBG_OFF
-#define AUTOIP_DEBUG LWIP_DBG_ON
+#define AUTOIP_DEBUG LWIP_DBG_OFF
+//#define AUTOIP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> SNMP Debug option

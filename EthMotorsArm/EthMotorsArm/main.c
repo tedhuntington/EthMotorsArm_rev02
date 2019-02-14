@@ -45,6 +45,12 @@ void mac_receive_cb(struct mac_async_descriptor *desc)
 	//printf("recvd\n");
 }
 
+void mac_transmit_cb(struct mac_async_descriptor *desc)
+{
+	//gmac_tx_flag = true;
+	//printf("tx\n");
+}
+
 static void status_callback(struct netif *n)
 {
 	if (n->flags & NETIF_FLAG_UP) {
@@ -163,7 +169,7 @@ int main(void)
 	io_write(io,OutStr,strlen(OutStr));
 	//sprintf((char *)OutStr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n");
 	//io_write(io,OutStr,strlen(OutStr));
-	sprintf((char *)OutStr,"EthMotorsArm_DRV8800_rev01\n");
+	sprintf((char *)OutStr,"EthMotorsArm_DRV8800_rev02\n");
 	io_write(io,OutStr,strlen(OutStr));
 	//sprintf((char *)OutStr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n");
 	//io_write(io,OutStr,strlen(OutStr));
@@ -185,6 +191,7 @@ int main(void)
 
 	printf("\r\nHello ATMEL World!\r\n");
 	mac_async_register_callback(&ETHERNET_MAC_0, MAC_ASYNC_RECEIVE_CB, (FUNC_PTR)mac_receive_cb);
+	mac_async_register_callback(&ETHERNET_MAC_0, MAC_ASYNC_TRANSMIT_CB, (FUNC_PTR)mac_transmit_cb);
 
 	eth_ipstack_init();
 	do {
@@ -217,19 +224,6 @@ int main(void)
 
 
 
-	//bring up the network interface
-#ifdef LWIP_DHCP
-/* DHCP mode. */
-	if (ERR_OK != dhcp_start(&LWIP_MACIF_desc)) {
-		LWIP_ASSERT("ERR_OK != dhcp_start", 0);
-	}
-	printf("DHCP Started\r\n");
-#else
-	//needed for lwip 2.0: netif_set_link_up(&LWIP_MACIF_desc);
-	/* Static mode. */
-	netif_set_up(&LWIP_MACIF_desc);
-	printf("Static IP Address Assigned\r\n");
-#endif 
 
 
 #if 0 
@@ -254,6 +248,8 @@ int main(void)
 	} //if (p!=0)
 #endif
 
+
+	//enable interrupts
 	hri_gmac_write_NCR_reg(GMAC,GMAC_NCR_MPE|GMAC_NCR_RXEN|GMAC_NCR_TXEN);  //network control register - enable write read and management port
 	//hri_gmac_write_NCFGR_reg(GMAC,0xc0000|GMAC_NCFGR_FD|GMAC_NCFGR_SPD);  //network configuration register- /48, FD, SPD
 	hri_gmac_write_NCFGR_reg(GMAC,0xc0000|GMAC_NCFGR_FD|GMAC_NCFGR_CAF|GMAC_NCFGR_IRXER|GMAC_NCFGR_IRXFCS|GMAC_NCFGR_SPD);  //network configuration register- /48, FD, SPD
@@ -278,6 +274,23 @@ int main(void)
 	//enable interrupts (global)
 //	__enable_irq();
 	
+
+
+	//bring up the network interface - ned to do here so above interrupts are enabled
+	#ifdef LWIP_DHCP
+	/* DHCP mode. */
+	if (ERR_OK != dhcp_start(&LWIP_MACIF_desc)) {
+		LWIP_ASSERT("ERR_OK != dhcp_start", 0);
+	}
+	printf("DHCP Started\r\n");
+	#else
+	//needed for lwip 2.0: netif_set_link_up(&LWIP_MACIF_desc);
+	/* Static mode. */
+	netif_set_up(&LWIP_MACIF_desc);
+	printf("Static IP Address Assigned\r\n");
+	#endif
+
+
 	/* Replace with your application code */
 	while (true) {
 
@@ -290,8 +303,8 @@ int main(void)
 
 		if (gmac_recv_flag) {
 			//printf("gmac_recd");
-			sprintf((char *)OutStr,"recvd2\n");
-			io_write(io,OutStr,strlen(OutStr));
+			//sprintf((char *)OutStr,"recvd2\n");
+			//io_write(io,OutStr,strlen(OutStr));
 			
 			gmac_recv_flag = false;
 			ethernetif_mac_input(&LWIP_MACIF_desc);
@@ -325,15 +338,19 @@ int main(void)
 
 //	GMAC_Handler();
 	//mac_async_read(&MACIF, ReadBuffer, 10);
-	volatile uint32_t imr,isr,ncr,ncfgr,ur,rsr,dcfgr;
+	volatile uint32_t imr,isr,ier,ncr,ncfgr,ur,rsr,dcfgr,nsr,tsr;
 	//read GMAC interrupt mask register to confirm which interrupts are enabled (=0, RCOMP: receive complete= bit1)
 	imr=hri_gmac_read_IMR_reg(GMAC);  //interrupt mask register
 	isr=hri_gmac_read_ISR_reg(GMAC);  //interrupt status register
+	//ier=hri_gmac_read_IER_reg(GMAC);  //interrupt enabled register
 	ncr=hri_gmac_read_NCR_reg(GMAC);  //network control register
 	ncfgr=hri_gmac_read_NCFGR_reg(GMAC);  //network configuration register
 	ur=hri_gmac_read_UR_reg(GMAC);  //user register - bit 0=0 for RMII
 	dcfgr=hri_gmac_read_DCFGR_reg(GMAC);  //DMA Configuration register 
 	rsr=hri_gmac_read_RSR_reg(GMAC);  //user register - bit 0=0 for RMII
+	nsr=hri_gmac_read_NSR_reg(GMAC);  //bit 1 and 2
+	tsr=hri_gmac_read_TSR_reg(GMAC);  //bit 5 tx complete
+	
 	//could test loop back send and receive: set LBL bit in NCR
 
 	}  //while(1)

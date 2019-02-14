@@ -60,7 +60,7 @@
 // <i> the hostname for this ethernet interface
 // <id> macif_hostname
 #ifndef CONF_LWIP_MACIF_HOSTNAME
-#define CONF_LWIP_MACIF_HOSTNAME "lwip"
+#define CONF_LWIP_MACIF_HOSTNAME "ROBOT" //"lwip"
 #endif
 
 // <s> Host Name descriptive abbreviation

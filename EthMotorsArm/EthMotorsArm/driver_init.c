@@ -98,6 +98,9 @@ void ETHERNET_MAC_0_PORT_init(void)
 	gpio_set_pin_function(PA19, PINMUX_PA19L_GMAC_GTX1);
 
 	gpio_set_pin_function(PA17, PINMUX_PA17L_GMAC_GTXEN);
+
+	gpio_set_pin_function(PA14, PINMUX_PA14L_GMAC_GTXCK); //tph REFCLK
+
 }
 
 void ETHERNET_MAC_0_CLOCK_init(void)
