@@ -15,6 +15,10 @@
 #include <lwip/dhcp.h>
 #include <string.h>
 
+struct netif LWIP_MACIF_desc;
+u8_t LWIP_MACIF_hwaddr[6];
+
+
 extern struct mac_async_descriptor ETHERNET_MAC_0;
 
 void LWIP_init(void)
@@ -22,8 +26,6 @@ void LWIP_init(void)
 	lwip_init();
 }
 
-struct netif LWIP_MACIF_desc;
-static u8_t  LWIP_MACIF_hwaddr[6];
 
 /**
  * Should be called at the beginning of the program to set up the

@@ -14,6 +14,9 @@
 #include <udpserver.h>
 #include <robot_motor_pic_instructions.h>
 
+#define PCB_NAME_LENGTH 5
+static const char *PCB_Name = "Motor";
+#define UDP_PORT 53510  //port used for UDP communication
 
 /* Saved total time in mS since timer was enabled */
 volatile static u32_t systick_timems;
@@ -24,6 +27,7 @@ struct udp_pcb *udpserver_pcb; //udp server
 //extern struct mac_async_descriptor MACIF; //is declared as ETHERNET_MAC_0 in driver_init.c
 extern struct mac_async_descriptor ETHERNET_MAC_0;
 extern struct netif LWIP_MACIF_desc;
+extern u8_t LWIP_MACIF_hwaddr[6];
 
 u32_t sys_now(void)
 {
@@ -168,7 +172,7 @@ case ROBOT_MOTORS_TEST: //send back 0x12345678
     ReturnInst[7]=0x34;
     ReturnInst[8]=0x56;
     ReturnInst[9]=0x78;
-	udp_sendto(pcb, p, IP_ADDR_BROADCAST, 53510); //dest port
+	udp_sendto(pcb, p, IP_ADDR_BROADCAST, UDP_PORT); //dest port
 	
     while (TCPIP_UDP_PutIsReady(appData.socket)<9) {};
     TCPIP_UDP_ArrayPut(appData.socket,ReturnInst,9);  //little endian       
@@ -184,6 +188,8 @@ case ROBOT_MOTORS_PCB_NAME: //01 send back mac+name/id
     //this presumes that there is only 1 net
     //in the future there could be more than 1 net, 
     //for example a wireless net too
+	
+
     //netH = TCPIP_STACK_GetDefaultNet();
     app_netH = TCPIP_STACK_IndexToNet(0);  //presumes net 0 is the wired net
     //pMyNetIf = _TCPIPStackHandleToNet(netH);
@@ -207,7 +213,9 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 {
 	int i;
 	uint8_t *InstData; //pointer to udp data (instruction)
-	uint8_t ReturnInst[50]; //currently just 50 bytes but probably will change
+	uint8_t *ReturnInst; //currently just 50 bytes but probably will change
+	struct pbuf *retbuf;  //return buffer
+	int ReturnInstLen;
 
 	//printf("received at %d, echoing to the same port\n",pcb->local_port);
 	//dst_ip = &(pcb->remote_ip); // this is zero always
@@ -220,24 +228,43 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 				//		udp_sendto(pcb, p, &forward_ip, fwd_port); //dest port
 				
 		//Process any UDP instructions recognized
-		if (pcb->local_port==53510) {  //note that currently there could never be a different port because UDP server only listens to this port
-			printf("port: %d ", pcb->local_port);
+		if (pcb->local_port==UDP_PORT) {  //note that currently there could never be a different port because UDP server only listens to this port
+			printf("port: %d\n", pcb->local_port);
 			
 			InstData=(uint8_t *)(*p).payload;  //shorthand to data
-
 			switch(InstData[4]) //Robot Instruction
 			{
 			case ROBOT_MOTORS_TEST: //send back 0x12345678
-				//memcpy(ReturnInst,InstData,5); //copy IP + inst byte to return instruction
+				retbuf = pbuf_alloc(PBUF_TRANSPORT, 10, PBUF_RAM);
+				ReturnInst=retbuf->payload;
+				memcpy(ReturnInst,p->payload,5); //copy IP + inst byte to return instruction
 				ReturnInst[6]=0x12;
 				ReturnInst[7]=0x34;
 				ReturnInst[8]=0x56;
 				ReturnInst[9]=0x78;
-				//udp_sendto(pcb, p, addr, 53510); //dest port
+				udp_sendto(pcb, retbuf, addr, UDP_PORT); //dest port
+				pbuf_free(retbuf);
 				break;
+			case ROBOT_MOTORS_PCB_NAME: //01 send back mac+name/id
+				retbuf = pbuf_alloc(PBUF_TRANSPORT, 5+sizeof(LWIP_MACIF_hwaddr)+PCB_NAME_LENGTH, PBUF_RAM);
+				ReturnInst=retbuf->payload;
+				ReturnInstLen=5;				   
+				memcpy(ReturnInst,p->payload,5); //copy IP + inst byte to return instruction
+				//get the MAC address from the default network interface
+				//this presumes that there is only 1 net
+				//in the future there could be more than 1 net,
+				//for example a wireless net too
+				memcpy(ReturnInst+ReturnInstLen,LWIP_MACIF_hwaddr,sizeof(LWIP_MACIF_hwaddr));//copy mac
+				ReturnInstLen+=sizeof(LWIP_MACIF_hwaddr);
+				memcpy(ReturnInst+ReturnInstLen,PCB_Name,PCB_NAME_LENGTH);//copy name
+				ReturnInstLen+=PCB_NAME_LENGTH; //MOTOR
+				udp_sendto(pcb, retbuf, addr, UDP_PORT); //dest port
+				pbuf_free(retbuf);
+			break;
+
 			} //switch
 
-		} //if (pcb->local_port==53510) {
+		} //if (pcb->local_port==UDP_PORT) {
 		pbuf_free(p);
 	} //if (p != NULL) {
 } //void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
@@ -332,8 +359,8 @@ int main(void)
 	//start_udp();
 	udpserver_pcb = udp_new();  //create udp server
 	//IP4_ADDR(&forward_ip, 192, 168,   2, 254);
-//	udp_bind(udpserver_pcb, IP_ADDR_ANY, 53510);   //port 53510 
-	udp_bind(udpserver_pcb, &LWIP_MACIF_desc.ip_addr.addr, 53510);   //port 53510 
+//	udp_bind(udpserver_pcb, IP_ADDR_ANY, UDP_PORT);   //port UDP_PORT 
+	udp_bind(udpserver_pcb, &LWIP_MACIF_desc.ip_addr.addr, UDP_PORT);   //port UDP_PORT 
 	udp_recv(udpserver_pcb, udpserver_recv, NULL);  //set udpserver callback function
 	
 	const int out_buf_size=4;
