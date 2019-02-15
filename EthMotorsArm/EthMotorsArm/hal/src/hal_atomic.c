@@ -54,7 +54,6 @@ void atomic_enter_critical(hal_atomic_t volatile *atomic)
 void atomic_leave_critical(hal_atomic_t volatile *atomic)
 {
 	__DMB();
-	//__enable_irq();  //tph added
 	__set_PRIMASK(*atomic);
 }
 

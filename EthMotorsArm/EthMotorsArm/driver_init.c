@@ -15,6 +15,8 @@
 
 struct timer_descriptor TIMER_0;
 
+struct usart_sync_descriptor TARGET_IO;
+
 struct usart_sync_descriptor USART_0;
 
 struct usart_sync_descriptor USART_1;
@@ -30,6 +32,29 @@ static void TIMER_0_init(void)
 {
 	hri_mclk_set_APBAMASK_RTC_bit(MCLK);
 	timer_init(&TIMER_0, RTC, _rtc_get_timer());
+}
+
+void TARGET_IO_PORT_init(void)
+{
+
+	gpio_set_pin_function(PA04, PINMUX_PA04D_SERCOM0_PAD0);
+
+	gpio_set_pin_function(PA05, PINMUX_PA05D_SERCOM0_PAD1);
+}
+
+void TARGET_IO_CLOCK_init(void)
+{
+	hri_gclk_write_PCHCTRL_reg(GCLK, SERCOM0_GCLK_ID_CORE, CONF_GCLK_SERCOM0_CORE_SRC | (1 << GCLK_PCHCTRL_CHEN_Pos));
+	hri_gclk_write_PCHCTRL_reg(GCLK, SERCOM0_GCLK_ID_SLOW, CONF_GCLK_SERCOM0_SLOW_SRC | (1 << GCLK_PCHCTRL_CHEN_Pos));
+
+	hri_mclk_set_APBAMASK_SERCOM0_bit(MCLK);
+}
+
+void TARGET_IO_init(void)
+{
+	TARGET_IO_CLOCK_init();
+	usart_sync_init(&TARGET_IO, SERCOM0, (void *)NULL);
+	TARGET_IO_PORT_init();
 }
 
 void USART_0_PORT_init(void)
@@ -97,10 +122,9 @@ void ETHERNET_MAC_0_PORT_init(void)
 
 	gpio_set_pin_function(PA19, PINMUX_PA19L_GMAC_GTX1);
 
+	gpio_set_pin_function(PA14, PINMUX_PA14L_GMAC_GTXCK);
+
 	gpio_set_pin_function(PA17, PINMUX_PA17L_GMAC_GTXEN);
-
-	gpio_set_pin_function(PA14, PINMUX_PA14L_GMAC_GTXCK); //tph REFCLK
-
 }
 
 void ETHERNET_MAC_0_CLOCK_init(void)
@@ -127,6 +151,8 @@ void system_init(void)
 	init_mcu();
 
 	TIMER_0_init();
+
+	TARGET_IO_init();
 
 	USART_0_init();
 

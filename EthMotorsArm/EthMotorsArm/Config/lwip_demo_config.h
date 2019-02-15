@@ -43,7 +43,7 @@
 // <i> AT24MAC address
 // <id> at24mac_slave_address
 #ifndef CONF_AT24MAC_ADDRESS
-#define CONF_AT24MAC_ADDRESS 0//tph 0x5e
+#define CONF_AT24MAC_ADDRESS 0//0x5e//0//tph 0x5e
 #endif
 // </h>
 

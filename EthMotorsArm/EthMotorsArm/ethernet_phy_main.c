@@ -11,6 +11,7 @@
 #include <ethernet_phy_main.h>
 
 #define PHY_RESET_PIN 36  //pin 36 (PB14) is PHY reset  
+#define PHY_YELLOW_LED_PIN 44  //pin 44 (PC14) is PHY YELLOW LED  
 
 struct ethernet_phy_descriptor ETHERNET_PHY_0_desc;
 
@@ -44,6 +45,9 @@ void ethernet_phys_init(void)
 	gpio_set_pin_direction(PHY_RESET_PIN,GPIO_DIRECTION_OUT);
 	gpio_set_pin_level(PHY_RESET_PIN,true);
 	//delay for 100us
+	//set PHY YELLOW LED low
+	gpio_set_pin_direction(PHY_YELLOW_LED_PIN,GPIO_DIRECTION_OUT);
+	gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
 
 	ETHERNET_PHY_0_init();
 }

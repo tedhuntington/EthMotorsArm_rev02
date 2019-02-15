@@ -40,14 +40,14 @@
 // <i> Enables PFC negotiation and recognition of priority-based pause frames.
 // <id> gmac_arch_ncr_enpbpr
 #ifndef CONF_GMAC_NCR_ENPBPR
-#define CONF_GMAC_NCR_ENPBPR 0
+#define CONF_GMAC_NCR_ENPBPR 1
 #endif
 
 // <q> Enable PFC Priority-based Pause Frame
 // <i> Takes the values stored in the Transmit PFC Pause Register.
 // <id> gmac_arch_ncr_txpbpf
 #ifndef CONF_GMAC_NCR_TXPBPF
-#define CONF_GMAC_NCR_TXPBPF 0
+#define CONF_GMAC_NCR_TXPBPF 1
 #endif
 
 // </h>
@@ -176,7 +176,7 @@
 // <5=> 96
 // <id> gmac_arch_ncfgr_clk
 #ifndef CONF_GMAC_NCFGR_CLK
-#define CONF_GMAC_NCFGR_CLK 4  //tph MCK=120mhz/48=2.5MHz
+#define CONF_GMAC_NCFGR_CLK 4
 #endif
 
 /**
@@ -312,7 +312,7 @@
 // <i> to buffer multiple frames.
 // <id> gmac_arch_dma_cfg
 #ifndef CONF_GMAC_DMA_CFG
-#define CONF_GMAC_DMACFG 0
+#define CONF_GMAC_DMACFG 1
 #endif
 
 // <o> Fixed Burst Length for DMA Data Operations

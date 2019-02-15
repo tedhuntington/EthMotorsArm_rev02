@@ -137,12 +137,19 @@
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy/ethernet_phy.c" IsConfig="false" Hash="JjCot12s6Vr3LaCLNfWmnA" />
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy/ethernet_phy.h" IsConfig="false" Hash="q+j6+akFjD1GE0rErBV5XA" />
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy/ieee8023_mii_standard_register.h" IsConfig="false" Hash="EV5qmqdVr8Wik4/yBUuhUg" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/gcc/read.c" IsConfig="false" Hash="965gzdOr4sfKJQ4OpEJN/g" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/gcc/write.c" IsConfig="false" Hash="gCAVrSOZuCMZ84vNa/WFxA" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/iar/read.c" IsConfig="false" Hash="IpkgLxXTg/nDat19kCJ3gw" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/iar/write.c" IsConfig="false" Hash="JTD9ZyU1GAbpub8mamr/ZA" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/keil/Retarget.c" IsConfig="false" Hash="NzdDPGuEvGimitFm3wVXxw" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/stdio_io.c" IsConfig="false" Hash="Nx8PfIAymK/f5AjLql/CyQ" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_redirect/stdio_io.h" IsConfig="false" Hash="4X02f8UL8cjBHeGJM3BnHw" />
           <AcmeProjectActionInfo Action="File" Source="main.c" IsConfig="false" Hash="k0AH7j+BrmdFhBPzCCMptA" />
-          <AcmeProjectActionInfo Action="File" Source="driver_init.c" IsConfig="false" Hash="IDMszfAwc/TObQ9nYYqrRA" />
-          <AcmeProjectActionInfo Action="File" Source="driver_init.h" IsConfig="false" Hash="n9szSbUsDVZZSshdn2nS+Q" />
-          <AcmeProjectActionInfo Action="File" Source="atmel_start_pins.h" IsConfig="false" Hash="KYlNAz6DIDrUua0nPYJEFA" />
-          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.h" IsConfig="false" Hash="DnNO+/kWYYfrILNDSFPZFQ" />
-          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.c" IsConfig="false" Hash="+MOhV/CFSdm7pPm256qj2g" />
+          <AcmeProjectActionInfo Action="File" Source="driver_init.c" IsConfig="false" Hash="NNH2NRold2w2Yuul3sKglg" />
+          <AcmeProjectActionInfo Action="File" Source="driver_init.h" IsConfig="false" Hash="QefWgjnsq7TPENlZ1KfdIg" />
+          <AcmeProjectActionInfo Action="File" Source="atmel_start_pins.h" IsConfig="false" Hash="7zXytUIlrz46cgoejsaSww" />
+          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.h" IsConfig="false" Hash="dm4rUTSdLoZj88A4D0z6Og" />
+          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.c" IsConfig="false" Hash="+9uvmBL2wBsLCP07/vEpoA" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hal_timer.h" IsConfig="false" Hash="5pZVthtMl40VMvofOld2ng" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hal_usart_sync.h" IsConfig="false" Hash="ZzIGSRyjZuxRzFAtNNt7sw" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_calendar.h" IsConfig="false" Hash="Axxal1o5u+cNnytorSIZkA" />
@@ -174,8 +181,10 @@
           <AcmeProjectActionInfo Action="File" Source="hpl/sercom/hpl_sercom.c" IsConfig="false" Hash="XnaBo+nrPZOJnbUOZmfBmA" />
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy_main.c" IsConfig="false" Hash="9PnGnZ9Lp45nn37tCwHecg" />
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy_main.h" IsConfig="false" Hash="aH90uRNJljpJSCpSzfmBxw" />
-          <AcmeProjectActionInfo Action="File" Source="atmel_start.h" IsConfig="false" Hash="Ojb72ws5TqneshFVHVqzqg" />
-          <AcmeProjectActionInfo Action="File" Source="atmel_start.c" IsConfig="false" Hash="kmTGXItxOA1SBkNfImIweA" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_start.c" IsConfig="false" Hash="RqMod9NnhK9YNpvUu5IILg" />
+          <AcmeProjectActionInfo Action="File" Source="stdio_start.h" IsConfig="false" Hash="5j2k69zdoQpbzluEyr/rHQ" />
+          <AcmeProjectActionInfo Action="File" Source="atmel_start.h" IsConfig="false" Hash="RKZjZayvAEx81djxR0NCnw" />
+          <AcmeProjectActionInfo Action="File" Source="atmel_start.c" IsConfig="false" Hash="lyccvgaN9qACNjjX3MzLnQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_cmcc_config.h" IsConfig="true" Hash="bmtxQ8rLloaRtAo2HeXZRQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_dmac_config.h" IsConfig="true" Hash="mNec32O7w53e4vDmQlvjCA" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_gclk_config.h" IsConfig="true" Hash="qFfXbIiu7Skw/l5fYsEt7Q" />
@@ -185,9 +194,10 @@
           <AcmeProjectActionInfo Action="File" Source="config/hpl_oscctrl_config.h" IsConfig="true" Hash="HO1Z9YoEymQ1BPYP8UeQOQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_port_config.h" IsConfig="true" Hash="q78dOqqSQQP36czagr8gcQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_rtc_config.h" IsConfig="true" Hash="9Fe6jPSvaDcH9Ejz/4s7XA" />
-          <AcmeProjectActionInfo Action="File" Source="config/hpl_sercom_config.h" IsConfig="true" Hash="n7A+ViCduInbJtJGJCxp5A" />
-          <AcmeProjectActionInfo Action="File" Source="config/peripheral_clk_config.h" IsConfig="true" Hash="hoSOP6QrSCFY/O9HvDdvEA" />
+          <AcmeProjectActionInfo Action="File" Source="config/hpl_sercom_config.h" IsConfig="true" Hash="DbzJIz6wXlzrtBg5epu/5g" />
+          <AcmeProjectActionInfo Action="File" Source="config/peripheral_clk_config.h" IsConfig="true" Hash="G24SeF9SFkPqHSyiye6eWA" />
           <AcmeProjectActionInfo Action="File" Source="config/ieee8023_mii_standard_config.h" IsConfig="true" Hash="F6MiFC3dRK3mO0hW6lwdbg" />
+          <AcmeProjectActionInfo Action="File" Source="config/stdio_redirect_config.h" IsConfig="true" Hash="CKmkBk12sfr7mb+HRQBuzg" />
         </AcmeActionInfos>
         <NonsecureFilesInfo />
       </AcmeProjectConfig>
@@ -237,6 +247,10 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>../lwip/lwip-1.4.0/port/include</Value>
+      <Value>../lwip/lwip-1.4.0/port</Value>
+      <Value>../lwip/lwip-1.4.0/src/include</Value>
+      <Value>../lwip/lwip-1.4.0/src/include/ipv4</Value>
       <Value>../Config</Value>
       <Value>../</Value>
       <Value>../examples</Value>
@@ -256,12 +270,8 @@
       <Value>../hpl/sercom</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
-      <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
-      <Value>../lwip/lwip-1.4.0/port/include</Value>
-      <Value>../lwip/lwip-1.4.0/port</Value>
-      <Value>../lwip/lwip-1.4.0/src/include</Value>
-      <Value>../lwip/lwip-1.4.0/src/include/ipv4</Value>
       <Value>../stdio_redirect</Value>
+      <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -304,6 +314,7 @@
       <Value>../hpl/sercom</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
+      <Value>../stdio_redirect</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
@@ -329,6 +340,7 @@
       <Value>../hpl/sercom</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
+      <Value>../stdio_redirect</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
@@ -351,6 +363,10 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>../lwip/lwip-1.4.0/src/include</Value>
+      <Value>../lwip/lwip-1.4.0/port/include</Value>
+      <Value>../lwip/lwip-1.4.0/src/include/ipv4</Value>
+      <Value>../lwip/lwip-1.4.0/port</Value>
       <Value>../Config</Value>
       <Value>../</Value>
       <Value>../examples</Value>
@@ -370,12 +386,8 @@
       <Value>../hpl/sercom</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
-      <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
-      <Value>../lwip/lwip-1.4.0/src/include</Value>
-      <Value>../lwip/lwip-1.4.0/port/include</Value>
-      <Value>../lwip/lwip-1.4.0/src/include/ipv4</Value>
-      <Value>../lwip/lwip-1.4.0/port</Value>
       <Value>../stdio_redirect</Value>
+      <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
@@ -419,6 +431,7 @@
       <Value>../hpl/sercom</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
+      <Value>../stdio_redirect</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
@@ -445,6 +458,7 @@
       <Value>../hpl/sercom</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
+      <Value>../stdio_redirect</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
@@ -508,6 +522,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Config\RTE_Components.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Config\stdio_redirect_config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Device_Startup\startup_same53.c">
@@ -1267,6 +1284,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="robot_motor_pic_instructions.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="stdio_redirect\gcc\read.c">

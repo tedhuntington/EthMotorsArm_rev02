@@ -36,6 +36,14 @@
       <require Dname="ATSAME53N20A"/>
       <accept Tcompiler="GCC"/>
     </condition>
+    <condition id="IAR">
+      <require Dname="ATSAME53N20A"/>
+      <accept Tcompiler="IAR"/>
+    </condition>
+    <condition id="ARMCC">
+      <require Dname="ATSAME53N20A"/>
+      <accept Tcompiler="ARMCC"/>
+    </condition>
   </conditions>
   <components generator="AtmelStart">
     <component Cclass="AtmelStart" Cgroup="Framework" Cversion="1.0.0" condition="CMSIS Device Startup">
@@ -145,6 +153,14 @@
         <file category="source" condition="ARMCC, GCC, IAR" name="ethernet_phy/ethernet_phy.c"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="ethernet_phy/ethernet_phy.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="ethernet_phy/ieee8023_mii_standard_register.h"/>
+        <file category="doc" condition="ARMCC, GCC, IAR" name="documentation/stdio.rst"/>
+        <file category="source" condition="GCC" name="stdio_redirect/gcc/read.c"/>
+        <file category="source" condition="GCC" name="stdio_redirect/gcc/write.c"/>
+        <file category="source" condition="IAR" name="stdio_redirect/iar/read.c"/>
+        <file category="source" condition="IAR" name="stdio_redirect/iar/write.c"/>
+        <file category="source" condition="ARMCC" name="stdio_redirect/keil/Retarget.c"/>
+        <file category="source" condition="ARMCC, GCC, IAR" name="stdio_redirect/stdio_io.c"/>
+        <file category="header" condition="ARMCC, GCC, IAR" name="stdio_redirect/stdio_io.h"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="main.c"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="driver_init.c"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="driver_init.h"/>
@@ -182,6 +198,8 @@
         <file category="source" condition="ARMCC, GCC, IAR" name="hpl/sercom/hpl_sercom.c"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="ethernet_phy_main.c"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="ethernet_phy_main.h"/>
+        <file category="source" condition="ARMCC, GCC, IAR" name="stdio_start.c"/>
+        <file category="header" condition="ARMCC, GCC, IAR" name="stdio_start.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="atmel_start.h"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="atmel_start.c"/>
         <file attr="config" category="header" condition="ARMCC, GCC, IAR" name="config/hpl_cmcc_config.h"/>
@@ -196,6 +214,7 @@
         <file attr="config" category="header" condition="ARMCC, GCC, IAR" name="config/hpl_sercom_config.h"/>
         <file attr="config" category="header" condition="ARMCC, GCC, IAR" name="config/peripheral_clk_config.h"/>
         <file attr="config" category="header" condition="ARMCC, GCC, IAR" name="config/ieee8023_mii_standard_config.h"/>
+        <file attr="config" category="header" condition="ARMCC, GCC, IAR" name="config/stdio_redirect_config.h"/>
         <file category="include" condition="ARMCC, GCC, IAR" name=""/>
         <file category="include" condition="ARMCC, GCC, IAR" name="config"/>
         <file category="include" condition="ARMCC, GCC, IAR" name="examples"/>
@@ -217,6 +236,9 @@
         <file category="include" condition="ARMCC, GCC, IAR" name=""/>
         <file category="include" condition="ARMCC, GCC, IAR" name="config"/>
         <file category="include" condition="ARMCC, GCC, IAR" name="ethernet_phy"/>
+        <file category="include" condition="ARMCC, GCC, IAR" name=""/>
+        <file category="include" condition="ARMCC, GCC, IAR" name="config"/>
+        <file category="include" condition="ARMCC, GCC, IAR" name="stdio_redirect"/>
         <file category="include" condition="ARMCC, GCC, IAR" name=""/>
       </files>
     </component>

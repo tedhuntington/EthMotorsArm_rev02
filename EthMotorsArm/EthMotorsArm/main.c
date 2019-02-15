@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <udpserver.h>
+#include <robot_motor_pic_instructions.h>
+
 
 /* Saved total time in mS since timer was enabled */
 volatile static u32_t systick_timems;
@@ -42,13 +44,17 @@ void systick_enable(void)
 void mac_receive_cb(struct mac_async_descriptor *desc)
 {
 	gmac_recv_flag = true;
-	//printf("recvd\n");
+	//printf("rx ");
+	gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
+	//delay_ms(1);
+	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
+	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
 }
 
 void mac_transmit_cb(struct mac_async_descriptor *desc)
 {
 	//gmac_tx_flag = true;
-	//printf("tx\n");
+	//printf("tx ");
 }
 
 static void status_callback(struct netif *n)
@@ -123,12 +129,87 @@ static void read_macaddress(u8_t *mac)
 	#endif
 }
 
+#if 0 
+//Process any kind of instruction
+void Process_Instruction(struct pbuf *p)
+{
 
+
+#if 0 
+uint32_t* MemAddr;
+uint32_t MemData;
+uint32_t InstValue;
+uint8_t *SendData;
+uint32_t InstLen;
+TCPIP_NET_HANDLE netH;
+uint32_t ReturnInstLen;
+TCPIP_NET_IF *pNetIf;
+uint32_t NumBytes,i;
+#endif
+
+//the first 4-bytes of the instruction are the IP of the source of the instruction
+//this IP needs to be sent back so the return data can reach the correct requester
+//in particular when the instruction involves a long term periodic sending back of data
+
+// Transfer the data out of the TCP RX FIFO and into our local processing buffer.
+//NumBytes= TCPIP_UDP_ArrayGet(appData.socket, InstData, InstDataLen);
+
+InstData=(uint8_t *)(*p).payload;
+
+//SYS_CONSOLE_PRINT("\tReceived %d bytes\r\n",NumBytes);    
+    
+//switch(SetupPkt.bRequest)  //USB
+//switch(InstData[0]) //Robot Instruction
+switch(InstData[4]) //Robot Instruction
+{
+case ROBOT_MOTORS_TEST: //send back 0x12345678
+    memcpy(ReturnInst,InstData,5); //copy IP + inst byte to return instruction
+    ReturnInst[6]=0x12;
+    ReturnInst[7]=0x34;
+    ReturnInst[8]=0x56;
+    ReturnInst[9]=0x78;
+	udp_sendto(pcb, p, IP_ADDR_BROADCAST, 53510); //dest port
+	
+    while (TCPIP_UDP_PutIsReady(appData.socket)<9) {};
+    TCPIP_UDP_ArrayPut(appData.socket,ReturnInst,9);  //little endian       
+    TCPIP_UDP_Flush(appData.socket); //send the packet        
+    //while (UDPIsTxPutReady(UDPSendSock,9)<9) {};
+    //UDPPutArray(UDPSendSock,(uint8_t *)ReturnInst,9);  //little endian
+    //UDPFlush(UDPSendSock); //send the packet
+    break;
+case ROBOT_MOTORS_PCB_NAME: //01 send back mac+name/id
+    memcpy(ReturnInst,InstData,5); //copy IP + inst byte to return instruction
+    ReturnInstLen=5;
+    //get the MAC address from the default network interface
+    //this presumes that there is only 1 net
+    //in the future there could be more than 1 net, 
+    //for example a wireless net too
+    //netH = TCPIP_STACK_GetDefaultNet();
+    app_netH = TCPIP_STACK_IndexToNet(0);  //presumes net 0 is the wired net
+    //pMyNetIf = _TCPIPStackHandleToNet(netH);
+    pNetIf = _TCPIPStackHandleToNetUp(app_netH);
+    memcpy(ReturnInst+ReturnInstLen,(pNetIf)->netMACAddr.v,sizeof(pNetIf->netMACAddr));//copy mac
+    ReturnInstLen+=sizeof(pNetIf->netMACAddr);
+    memcpy(ReturnInst+ReturnInstLen,PCB_Name,PCB_NAME_LENGTH);//copy name
+    ReturnInstLen+=PCB_NAME_LENGTH; //MOTOR
+    //while (UDPIsTxPutReady(UDPSendSock,ReturnInstLen)<ReturnInstLen) {};
+    //UDPPutArray(UDPSendSock,(uint8_t *)ReturnInst,ReturnInstLen);  //little endian
+    //UDPFlush(UDPSendSock); //send the packet
+    while (TCPIP_UDP_PutIsReady(appData.socket)<ReturnInstLen) {};
+    TCPIP_UDP_ArrayPut(appData.socket,ReturnInst, ReturnInstLen);  //little endian       
+    TCPIP_UDP_Flush(appData.socket); //send the packet
+
+    break;
+} //void Process_Instruction(struct pbuf *p)
+#endif		
+		
 void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
 {
 	int i;
+	uint8_t *InstData; //pointer to udp data (instruction)
+	uint8_t ReturnInst[50]; //currently just 50 bytes but probably will change
 
-	printf("received at %d, echoing to the same port\n",pcb->local_port);
+	//printf("received at %d, echoing to the same port\n",pcb->local_port);
 	//dst_ip = &(pcb->remote_ip); // this is zero always
 	if (p != NULL) {
 		printf("UDP rcv %d bytes: ", (*p).len);
@@ -136,11 +217,31 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 		//			printf("%c",((char*)(*p).payload)[i]);
 		//    	printf("\n");
 		//udp_sendto(pcb, p, IP_ADDR_BROADCAST, 1234); //dest port
+				//		udp_sendto(pcb, p, &forward_ip, fwd_port); //dest port
+				
+		//Process any UDP instructions recognized
+		if (pcb->local_port==53510) {  //note that currently there could never be a different port because UDP server only listens to this port
+			printf("port: %d ", pcb->local_port);
+			
+			InstData=(uint8_t *)(*p).payload;  //shorthand to data
 
-		//		udp_sendto(pcb, p, &forward_ip, fwd_port); //dest port
+			switch(InstData[4]) //Robot Instruction
+			{
+			case ROBOT_MOTORS_TEST: //send back 0x12345678
+				//memcpy(ReturnInst,InstData,5); //copy IP + inst byte to return instruction
+				ReturnInst[6]=0x12;
+				ReturnInst[7]=0x34;
+				ReturnInst[8]=0x56;
+				ReturnInst[9]=0x78;
+				//udp_sendto(pcb, p, addr, 53510); //dest port
+				break;
+			} //switch
+
+		} //if (pcb->local_port==53510) {
 		pbuf_free(p);
-	}
-}
+	} //if (p != NULL) {
+} //void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
+
 
 
 int main(void)
@@ -226,7 +327,7 @@ int main(void)
 
 
 
-#if 0 
+//#if 0 
 	//udpecho_init(); //START UDP ECHO THREAD - requires netconn 
 	//start_udp();
 	udpserver_pcb = udp_new();  //create udp server
@@ -246,9 +347,11 @@ int main(void)
 		//udp_sendto(pcb, p, &forward_ip, fwd_port); //dest port
 		pbuf_free(p);
 	} //if (p!=0)
-#endif
+//#endif
 
 
+
+#if 0 
 	//enable interrupts
 	hri_gmac_write_NCR_reg(GMAC,GMAC_NCR_MPE|GMAC_NCR_RXEN|GMAC_NCR_TXEN);  //network control register - enable write read and management port
 	//hri_gmac_write_NCFGR_reg(GMAC,0xc0000|GMAC_NCFGR_FD|GMAC_NCFGR_SPD);  //network configuration register- /48, FD, SPD
@@ -264,6 +367,7 @@ int main(void)
 
 	//enable the GMAC interrupt
 	mac_async_enable_irq(&ETHERNET_MAC_0);
+#endif
 
 	//enable interrupts
 	//hri_nvic_write_ISPR_reg(&MACIF,)
@@ -338,6 +442,8 @@ int main(void)
 
 //	GMAC_Handler();
 	//mac_async_read(&MACIF, ReadBuffer, 10);
+
+#if 0 
 	volatile uint32_t imr,isr,ier,ncr,ncfgr,ur,rsr,dcfgr,nsr,tsr;
 	//read GMAC interrupt mask register to confirm which interrupts are enabled (=0, RCOMP: receive complete= bit1)
 	imr=hri_gmac_read_IMR_reg(GMAC);  //interrupt mask register
@@ -350,7 +456,7 @@ int main(void)
 	rsr=hri_gmac_read_RSR_reg(GMAC);  //user register - bit 0=0 for RMII
 	nsr=hri_gmac_read_NSR_reg(GMAC);  //bit 1 and 2
 	tsr=hri_gmac_read_TSR_reg(GMAC);  //bit 5 tx complete
-	
+#endif	
 	//could test loop back send and receive: set LBL bit in NCR
 
 	}  //while(1)

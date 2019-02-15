@@ -27,15 +27,23 @@ extern "C" {
 
 #include <hal_usart_sync.h>
 
+#include <hal_usart_sync.h>
+
 #include <hal_mac_async.h>
 
 extern struct timer_descriptor TIMER_0;
+
+extern struct usart_sync_descriptor TARGET_IO;
 
 extern struct usart_sync_descriptor USART_0;
 
 extern struct usart_sync_descriptor USART_1;
 
 extern struct mac_async_descriptor ETHERNET_MAC_0;
+
+void TARGET_IO_PORT_init(void);
+void TARGET_IO_CLOCK_init(void);
+void TARGET_IO_init(void);
 
 void USART_0_PORT_init(void);
 void USART_0_CLOCK_init(void);
