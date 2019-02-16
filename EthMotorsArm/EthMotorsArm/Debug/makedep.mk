@@ -68,9 +68,9 @@ hpl\pm\hpl_pm.c
 
 hpl\ramecc\hpl_ramecc.c
 
-hpl\rtc\hpl_rtc.c
-
 hpl\sercom\hpl_sercom.c
+
+hpl\tc\hpl_tc.c
 
 lwip\lwip-1.4.0\port\ethif_mac.c
 

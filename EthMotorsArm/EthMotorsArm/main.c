@@ -13,10 +13,18 @@
 #include <string.h>
 #include <udpserver.h>
 #include <robot_motor_pic_instructions.h>
+#include <main.h>
+#include <motor.h>  //motor data structures (motor port values and masks, duration, and program data structure)
 
 #define PCB_NAME_LENGTH 5
 static const char *PCB_Name = "Motor";
 #define UDP_PORT 53510  //port used for UDP communication
+
+//Motor variables
+uint8_t NumMotors;
+MotorStatus Motor[MAX_NUM_MOTORS];  //status of each motor
+int NumClocksInMotorDutyCycle; //the number of timer interrupt clocks in the motor duty cycle
+int MotorDutyCycleClock; //the time (in us) of each timer2 interrupt when the motor pins are updated
 
 /* Saved total time in mS since timer was enabled */
 volatile static u32_t systick_timems;
@@ -28,6 +36,7 @@ struct udp_pcb *udpserver_pcb; //udp server
 extern struct mac_async_descriptor ETHERNET_MAC_0;
 extern struct netif LWIP_MACIF_desc;
 extern u8_t LWIP_MACIF_hwaddr[6];
+//extern struct io_descriptor *stdio_io; 
 
 u32_t sys_now(void)
 {
@@ -44,6 +53,17 @@ void systick_enable(void)
 	systick_timems = 0;
 	SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
 }
+
+void usart0_receive_cb(struct mac_async_descriptor *desc)
+{
+	gmac_recv_flag = true;
+	//printf("rx ");
+	gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
+	//delay_ms(1);
+	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
+	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
+}
+
 
 void mac_receive_cb(struct mac_async_descriptor *desc)
 {
@@ -134,80 +154,209 @@ static void read_macaddress(u8_t *mac)
 }
 
 #if 0 
-//Process any kind of instruction
-void Process_Instruction(struct pbuf *p)
+//Process any kind of instruction - instrucitons are generalized so that this code is the same whether the instruciton came from ethernet, usart, or usart-esp
+void Process_Instruction(uint8_t Inst,uint32_t len,uint8_t type)
 {
 
-
-#if 0 
-uint32_t* MemAddr;
-uint32_t MemData;
-uint32_t InstValue;
-uint8_t *SendData;
-uint32_t InstLen;
-TCPIP_NET_HANDLE netH;
-uint32_t ReturnInstLen;
-TCPIP_NET_IF *pNetIf;
-uint32_t NumBytes,i;
-#endif
-
-//the first 4-bytes of the instruction are the IP of the source of the instruction
-//this IP needs to be sent back so the return data can reach the correct requester
-//in particular when the instruction involves a long term periodic sending back of data
-
-// Transfer the data out of the TCP RX FIFO and into our local processing buffer.
-//NumBytes= TCPIP_UDP_ArrayGet(appData.socket, InstData, InstDataLen);
-
-InstData=(uint8_t *)(*p).payload;
-
-//SYS_CONSOLE_PRINT("\tReceived %d bytes\r\n",NumBytes);    
-    
-//switch(SetupPkt.bRequest)  //USB
-//switch(InstData[0]) //Robot Instruction
-switch(InstData[4]) //Robot Instruction
-{
-case ROBOT_MOTORS_TEST: //send back 0x12345678
-    memcpy(ReturnInst,InstData,5); //copy IP + inst byte to return instruction
-    ReturnInst[6]=0x12;
-    ReturnInst[7]=0x34;
-    ReturnInst[8]=0x56;
-    ReturnInst[9]=0x78;
-	udp_sendto(pcb, p, IP_ADDR_BROADCAST, UDP_PORT); //dest port
-	
-    while (TCPIP_UDP_PutIsReady(appData.socket)<9) {};
-    TCPIP_UDP_ArrayPut(appData.socket,ReturnInst,9);  //little endian       
-    TCPIP_UDP_Flush(appData.socket); //send the packet        
-    //while (UDPIsTxPutReady(UDPSendSock,9)<9) {};
-    //UDPPutArray(UDPSendSock,(uint8_t *)ReturnInst,9);  //little endian
-    //UDPFlush(UDPSendSock); //send the packet
-    break;
-case ROBOT_MOTORS_PCB_NAME: //01 send back mac+name/id
-    memcpy(ReturnInst,InstData,5); //copy IP + inst byte to return instruction
-    ReturnInstLen=5;
-    //get the MAC address from the default network interface
-    //this presumes that there is only 1 net
-    //in the future there could be more than 1 net, 
-    //for example a wireless net too
-	
-
-    //netH = TCPIP_STACK_GetDefaultNet();
-    app_netH = TCPIP_STACK_IndexToNet(0);  //presumes net 0 is the wired net
-    //pMyNetIf = _TCPIPStackHandleToNet(netH);
-    pNetIf = _TCPIPStackHandleToNetUp(app_netH);
-    memcpy(ReturnInst+ReturnInstLen,(pNetIf)->netMACAddr.v,sizeof(pNetIf->netMACAddr));//copy mac
-    ReturnInstLen+=sizeof(pNetIf->netMACAddr);
-    memcpy(ReturnInst+ReturnInstLen,PCB_Name,PCB_NAME_LENGTH);//copy name
-    ReturnInstLen+=PCB_NAME_LENGTH; //MOTOR
-    //while (UDPIsTxPutReady(UDPSendSock,ReturnInstLen)<ReturnInstLen) {};
-    //UDPPutArray(UDPSendSock,(uint8_t *)ReturnInst,ReturnInstLen);  //little endian
-    //UDPFlush(UDPSendSock); //send the packet
-    while (TCPIP_UDP_PutIsReady(appData.socket)<ReturnInstLen) {};
-    TCPIP_UDP_ArrayPut(appData.socket,ReturnInst, ReturnInstLen);  //little endian       
-    TCPIP_UDP_Flush(appData.socket); //send the packet
-
-    break;
 } //void Process_Instruction(struct pbuf *p)
 #endif		
+		
+static struct timer_task MotorTimerTask;
+
+static void MotorTimerTask_cb(const struct timer_task *const timer_task)
+{
+//Process any motor pwm
+	uint8_t temp;
+	uint8_t i;
+
+
+	//go through each motor status and set/reset the correct PORTB and PORTC pins
+	for(i=0;i<NumMotors;i++) {//NUM_MOTORS;i++) {
+		if (Motor[i].Duration>0) { //this motor is moving, or will start moving
+			//set strength duty cycle
+			if (Motor[i].StrengthCount<Motor[i].Strength && !(Motor[i].flags&MOTOR_INST_FIRST_RUN)) { //set motor pins
+				//in "on" portion of duty cycle
+				//clear and set the direction pins
+				//(is the same for driver with or without a pulse pin)
+				if (Motor[i].Direction) {
+					//todo: write directly to correct OUTSET/OUTCLR register
+					gpio_set_pin_level(Motor[i].DirPin,true);
+					//CCW
+										
+					//clear clockwise pin
+					//LATB&=Motor[i].DirectionCWBitMask;
+					//*Motor[i].DirCWPort&=Motor[i].DirectionCWBitMask;
+				} else {
+					gpio_set_pin_level(Motor[i].DirPin,false);
+					//CW
+					//clear counter-clockwise pin
+					//set clockwise pin
+					//*Motor[i].DirCWPort|=Motor[i].DirectionCWBit;
+				}//if (Motor[i].Direction) {
+
+				//pulse the pulse pin if necessary
+				if (Motor[i].flags&MOTOR_DRIVER_USES_PULSE_PIN) {
+					gpio_set_pin_level(Motor[i].PulsePin,true);
+					//*Motor[i].PulsePort|=Motor[i].PulseBit;
+				}//if (Motor[i].flags&MOTOR_DRIVER_USES_PULSE_PIN) {
+			} else {  //if (Motor[i].StrengthCount<Motor[i].Strength)
+			
+				//in "off" part of duty cycle (or first run of a motor instruction)
+
+				if (Motor[i].flags&MOTOR_INST_FIRST_RUN) {
+					Motor[i].flags&=~MOTOR_INST_FIRST_RUN; //clear first run bit
+					if (Motor[i].StrengthCount>0) {
+						Motor[i].StrengthCount--; //set back 1 so direction can get set above
+					}
+				} //if (Motor[i].flags&MOTOR_INST_FIRST_RUN) {
+									    
+				//Note that there is no need to set direction pins
+				//because the "off" duty cycle is never called before the "on"
+				//duty cycle, and the "on" duty cycle sets the direction
+				//which doesn't need to change for the "off" cycle
+					
+				//*Motor[i].PulsePort&=Motor[i].PulseBitMask;
+				gpio_set_pin_level(Motor[i].PulsePin,false);
+			} //if (Motor[i].StrengthCount<motor[i].Strength)
+
+			Motor[i].StrengthCount++;  //increase duty cycle count
+			if (Motor[i].StrengthCount>=NumClocksInMotorDutyCycle) {  //reached end of duty cycle, reset count
+				Motor[i].StrengthCount=0;
+			}
+
+			//decrement Duration
+			if (Motor[i].Duration!=0) { //new inst might set Duration=0
+				Motor[i].Duration--;  //currently units are timer interrupts
+			}
+			//which depend on MotorDutyCycleClock
+		} else {  //no motor Duration - set motor pins to 0
+
+			Motor[i].StrengthCount=0;
+									    
+			gpio_set_pin_level(Motor[i].PulsePin,false);
+			} //if (Motor[i].Duration>0)
+		} //for(i=0;i<NUM_MOTORS;i++)
+
+} //static void MotorTimerTask_cb(const struct timer_task *const timer_task)
+
+
+
+//tph - TIMER_0 uses the TC0 peripheral which takes as input the 12MHz general clock divided by 4 = 3Mhz to produce (/75) a 40khz (25us) signal for Motor pwm
+void MotorTimer_Initialize(void)
+{
+	MotorTimerTask.interval = 1; //clock ticks
+	MotorTimerTask.cb       = MotorTimerTask_cb;
+	MotorTimerTask.mode     = TIMER_TASK_REPEAT;
+
+	timer_add_task(&TIMER_0, &MotorTimerTask);
+	timer_start(&TIMER_0);
+}
+		
+		
+//this instruction is a motor instruction to execute now
+//and contains (in 4 bytes):
+//Motor# (0:3),unused(4:7),direction(8),thrust(9:15),duration(16:31)
+//was 3 bytes:
+//motor# (address):4, direction:1, strength:3,duration:16
+void SendMotorInst(uint8_t *MInst)
+{
+    uint8_t MotorNum,Strength;
+    uint32_t Duration;
+
+    //set the motor status so the timer interrupt
+    //will find that a motor has a duration and needs to be moved
+    //determine which motor
+    MotorNum=(MInst[0]&0xf0)>>4;
+
+    Motor[MotorNum].Duration=0; //just in case motor is currently running (pulsing)
+    //SYS_TMR_DelayMS(1);  //wait to make sure motor is stopped if running (pulsing)
+    Motor[MotorNum].flags|=MOTOR_INST_FIRST_RUN; //first set motor pins to 00 to avoid short circuit
+    //for example, motor is turning with 10 then a 01 instruction is sent, and for a nanosecond when LATB is being set, possibly 2 pins might be 1 and cause a short at the h-bridge.
+
+    //if ((MInst[0]&0x08)!=0) {
+    if ((MInst[1]&0x80)!=0) {
+        //counter-clockwise
+       // Motor[MotorNum].DirectionMask=0x40>>(MotorNum*2);  //counter-clockwise
+         //Motor[MotorNum].DirectionMask=0x1<<(MotorNum*2);  //counter-clockwise
+         Motor[MotorNum].Direction=MOTOR_COUNTERCLOCKWISE;
+    } else {
+        //clock-wise
+        //Motor[MotorNum].DirectionMask=0x80>>(MotorNum*2);  //clockwise
+        //Motor[MotorNum].DirectionMask=0x2<<(MotorNum*2);  //clockwise
+        Motor[MotorNum].Direction=MOTOR_CLOCKWISE;
+    }
+
+    //set motor turn strength- number of timer clocks in "on" part of duty cycle
+    //0=stop 0x7=full speed (NumClkInDutyCycle)
+    //this number if multiplied by the NumClocksInMotorDutyCycle/7
+    //so for strength=1, Strength*NumClocksInMotorDutyCycle/7 (1 clks of 7 are on)
+    //for strength=7 the motor is on for every clock (7 of 7)
+    //Motor[MotorNum].Strength=((MInst[0]&0x07)*NumClocksInMotorDutyCycle)/ROBOT_MOTORS_DEFAULT_NUM_CLKS_IN_MOTOR_DUTY_CYCLE;
+    Strength=(MInst[1]&0x7f);//max is currently 0 to 127
+    //if strength is higher than the number of possible speeds, set at maximum strength
+    if (Strength> ROBOT_MOTORS_DEFAULT_NUM_CLKS_IN_MOTOR_DUTY_CYCLE) {
+        Strength=ROBOT_MOTORS_DEFAULT_NUM_CLKS_IN_MOTOR_DUTY_CYCLE;
+    }
+
+    //set motor turn duration (is 16-bit little endian int)
+    //Motor[MotorNum].Duration=(uint16_t)((MInst[2]<<8)+MInst[1]);
+    Duration=(uint32_t)((MInst[3]<<8)+MInst[2]);
+    //duration from user is in ms, so convert to timer interrupts:
+    //Motor[MotorNum].Duration is in timer interrupts 
+    //MotorDutyCycleClock is 25us by default (40khz) /2 = every 12.5us
+    //so convert Duration into time interrupt units (how many 12.5us units)
+
+    //if Duration*1000 < 127*MotorDutyCycleClock then Strength needs to be scaled down
+    //because the entire duty cycle of the motor will be < 127.
+    //ex: DurTime=1ms, MDCC=25us DurInts=1000/25=only 40 so if strength=127/2=63, that needs to be scaled down to 63/127=x/40
+    //x=63*40/127=19 so 19 timer interrupts will be on, and 21 off for a total of 40x25us=1ms
+
+    //convert ms to 12.5us units
+    //so Duration of 100ms in 25uS units=0.1/0.000025=4000 clocks * 2= 8000
+    //in us: (100)*1000/25=4000 * 2 8000, so generalizing in us:
+    //Duration*2000/MotorDutyCycle = number of TimerInterrupts for 
+    //user sent Duration in ms.
+    Duration*=2000; //Duration is divided by MotorDutyCycleClock below
+    //MotorDutyCycleClock is in ms so multiply Duration x 1000 and 
+    //x2 for on+off here.
+/*
+ //    
+    if (Duration/MotorDutyCycleClock < NumClocksInMotorDutyCycle) {  //(Duration/25<127)
+        //strength needs to be scaled down 
+        //at 40khz (25us) a pulse:
+        //1/10 speed gives a duty cycle of 127*25us=3.175ms, 
+        //so if the motor duration is < 3.175ms, the strength needs to be
+        //scaled down.
+        //(probably this will not ever happen since the minimum reaction time of the robot is currently 10ms 
+        //which is 100000/25=4000 timer interrupts. Note that at 1/2 speed the PWM would be 63on 63off x 3
+        //but not all pwm will work out perfectly, for example for duration = 3ms: 3000/25= 120 so 63on but only 57 off
+        //- although the motor is then off after. 
+        // with 127 speeds: 1/10 speed is 12on 115off = 300us on  2875us off
+        // with   7 speeds: 1/10 speed is  1on   6off =  25us on   150us off 
+        //so probably a lower number of speeds is better, for example: 20-40 speeds
+        Strength=(Strength*Duration)/(NumClocksInMotorDutyCycle*MotorDutyCycleClock);
+        //ex: 63*1000/127*25 = 19 timer interrupts of the 1000/25=40 total duty cycle interrupts
+    }
+*/
+    Motor[MotorNum].Strength=Strength;
+    Motor[MotorNum].StrengthCount=0;
+
+    //Convert duration in us to duration in number of timer interrupts
+    //since multiplying by 2000 above, I doubt Duration would ever be < MotorDutyCycleClock
+    //but just as a failsafe in case Motor[].Duration somehow will get set to 0]
+    //and somebody is trying to set strength=0 - probably not needed
+    if ((Duration/MotorDutyCycleClock)==0 && Duration>0) {
+      Motor[MotorNum].Duration=1;
+    } else {
+      Motor[MotorNum].Duration=Duration/MotorDutyCycleClock;  //note: this is the equivalent of enabling the motor
+    } 
+
+    Motor[MotorNum].DurationCount=0;
+
+	//was: start timer3 if not already started
+} //SendMotorInst
+
+		
 		
 void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
 {
@@ -216,6 +365,7 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 	uint8_t *ReturnInst; //currently just 50 bytes but probably will change
 	struct pbuf *retbuf;  //return buffer
 	int ReturnInstLen;
+	uint8_t MotorInst[4];  //motor instruction
 
 	//printf("received at %d, echoing to the same port\n",pcb->local_port);
 	//dst_ip = &(pcb->remote_ip); // this is zero always
@@ -229,7 +379,7 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 				
 		//Process any UDP instructions recognized
 		if (pcb->local_port==UDP_PORT) {  //note that currently there could never be a different port because UDP server only listens to this port
-			printf("port: %d\n", pcb->local_port);
+			//printf("port: %d\n", pcb->local_port);
 			
 			InstData=(uint8_t *)(*p).payload;  //shorthand to data
 			switch(InstData[4]) //Robot Instruction
@@ -261,7 +411,13 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 				udp_sendto(pcb, retbuf, addr, UDP_PORT); //dest port
 				pbuf_free(retbuf);
 			break;
-
+	        case ROBOT_MOTORS_SEND_4BYTE_INST:  //got send a 4 byte Instruction over Net (was USB)
+				MotorInst[0]=InstData[5];  //Motor Num<<4
+				MotorInst[1]=InstData[6];  //Dir+Strength
+				MotorInst[2]=InstData[7];  //duration low byte
+				MotorInst[3]=InstData[8];  //duration high byte
+				SendMotorInst(MotorInst);
+			break; 
 			} //switch
 
 		} //if (pcb->local_port==UDP_PORT) {
@@ -269,6 +425,31 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 	} //if (p != NULL) {
 } //void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
 
+int InitializeMotors(void) 
+{
+	
+	
+	//set number of clocks in motor duty cycle
+	//is 7 (but was 14), 7 timer2 interrupts make 1 full motor duty cycle
+	NumClocksInMotorDutyCycle=ROBOT_MOTORS_DEFAULT_NUM_CLKS_IN_MOTOR_DUTY_CYCLE;
+	MotorDutyCycleClock=ROBOT_MOTORS_DEFAULT_MOTOR_DUTY_CYCLE_CLK;
+	
+	
+	NumMotors=1;
+	//Clear the robot status array
+	memset(Motor,sizeof(MotorStatus)*NumMotors,0);
+
+
+	Motor[0].DirPin=GPIO(GPIO_PORTB, 13);
+	Motor[0].PulsePin=GPIO(GPIO_PORTB, 12);
+	gpio_set_pin_direction(Motor[0].DirPin,GPIO_DIRECTION_OUT);
+	gpio_set_pin_level(Motor[0].DirPin,false);
+	gpio_set_pin_direction(Motor[0].PulsePin,GPIO_DIRECTION_OUT);
+	gpio_set_pin_level(Motor[0].PulsePin,false);
+	
+
+	return(1);
+} //int InitializeMotors(void)
 
 
 int main(void)
@@ -279,6 +460,7 @@ int main(void)
 	int32_t ret;
 	u8_t    mac[6];
 	u8_t ReadBuffer[256];
+	//struct usart_async_status iostat;  //currently needed for usart async
 
 	/* Initializes MCU, drivers and middleware - tph - inits phy*/
 	atmel_start_init();
@@ -292,17 +474,25 @@ int main(void)
 	//init usart
 	usart_sync_get_io_descriptor(&USART_0, &io);
 	usart_sync_enable(&USART_0);
+	//usart_async_get_io_descriptor(&USART_0, &io);
+	//usart_async_enable(&USART_0);
 	count=0;
 	sprintf((char *)OutStr,"**************************\n");
 	io_write(io,OutStr,strlen(OutStr));
+	
+	//while (usart_async_get_status(&USART_0, &iostat)==ERR_BUSY);
 	//sprintf((char *)OutStr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n");
 	//io_write(io,OutStr,strlen(OutStr));
 	sprintf((char *)OutStr,"EthMotorsArm_DRV8800_rev02\n");
 	io_write(io,OutStr,strlen(OutStr));
+	//while (usart_async_get_status(&USART_0, &iostat)==ERR_BUSY);
+
 	//sprintf((char *)OutStr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n");
 	//io_write(io,OutStr,strlen(OutStr));
 	sprintf((char *)OutStr,"**************************\n");
 	io_write(io,OutStr,strlen(OutStr));
+	//while (usart_async_get_status(&USART_0, &iostat)==ERR_BUSY);
+
 	//sprintf((char *)OutStr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n");
 	//io_write(io,OutStr,strlen(OutStr));
 
@@ -318,6 +508,10 @@ int main(void)
 
 
 	printf("\r\nHello ATMEL World!\r\n");
+	//fflush(stdio_io);
+	//below does not work for printf because printf calls _puts_r which must send one char at a time 
+	//while (usart_async_get_status(&USART_0, &iostat)==ERR_BUSY); 
+
 	mac_async_register_callback(&ETHERNET_MAC_0, MAC_ASYNC_RECEIVE_CB, (FUNC_PTR)mac_receive_cb);
 	mac_async_register_callback(&ETHERNET_MAC_0, MAC_ASYNC_TRANSMIT_CB, (FUNC_PTR)mac_transmit_cb);
 
@@ -362,7 +556,9 @@ int main(void)
 //	udp_bind(udpserver_pcb, IP_ADDR_ANY, UDP_PORT);   //port UDP_PORT 
 	udp_bind(udpserver_pcb, &LWIP_MACIF_desc.ip_addr.addr, UDP_PORT);   //port UDP_PORT 
 	udp_recv(udpserver_pcb, udpserver_recv, NULL);  //set udpserver callback function
-	
+
+
+#if 0 	
 	const int out_buf_size=4;
 	const char buf[]="test";
 
@@ -374,7 +570,7 @@ int main(void)
 		//udp_sendto(pcb, p, &forward_ip, fwd_port); //dest port
 		pbuf_free(p);
 	} //if (p!=0)
-//#endif
+#endif
 
 
 
@@ -421,6 +617,9 @@ int main(void)
 	printf("Static IP Address Assigned\r\n");
 	#endif
 
+	InitializeMotors(); //set initial settings of all motors
+	//currently motor timer stop DHCP from working
+	//MotorTimer_Initialize();  //start timer for motor pwm
 
 	/* Replace with your application code */
 	while (true) {

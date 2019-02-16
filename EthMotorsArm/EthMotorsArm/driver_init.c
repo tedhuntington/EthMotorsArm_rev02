@@ -11,51 +11,13 @@
 #include <utils.h>
 #include <hal_init.h>
 
-#include <hpl_rtc_base.h>
-
 struct timer_descriptor TIMER_0;
-
-struct usart_sync_descriptor TARGET_IO;
 
 struct usart_sync_descriptor USART_0;
 
 struct usart_sync_descriptor USART_1;
 
 struct mac_async_descriptor ETHERNET_MAC_0;
-
-/**
- * \brief Timer initialization function
- *
- * Enables Timer peripheral, clocks and initializes Timer driver
- */
-static void TIMER_0_init(void)
-{
-	hri_mclk_set_APBAMASK_RTC_bit(MCLK);
-	timer_init(&TIMER_0, RTC, _rtc_get_timer());
-}
-
-void TARGET_IO_PORT_init(void)
-{
-
-	gpio_set_pin_function(PA04, PINMUX_PA04D_SERCOM0_PAD0);
-
-	gpio_set_pin_function(PA05, PINMUX_PA05D_SERCOM0_PAD1);
-}
-
-void TARGET_IO_CLOCK_init(void)
-{
-	hri_gclk_write_PCHCTRL_reg(GCLK, SERCOM0_GCLK_ID_CORE, CONF_GCLK_SERCOM0_CORE_SRC | (1 << GCLK_PCHCTRL_CHEN_Pos));
-	hri_gclk_write_PCHCTRL_reg(GCLK, SERCOM0_GCLK_ID_SLOW, CONF_GCLK_SERCOM0_SLOW_SRC | (1 << GCLK_PCHCTRL_CHEN_Pos));
-
-	hri_mclk_set_APBAMASK_SERCOM0_bit(MCLK);
-}
-
-void TARGET_IO_init(void)
-{
-	TARGET_IO_CLOCK_init();
-	usart_sync_init(&TARGET_IO, SERCOM0, (void *)NULL);
-	TARGET_IO_PORT_init();
-}
 
 void USART_0_PORT_init(void)
 {
@@ -101,6 +63,20 @@ void USART_1_init(void)
 	USART_1_CLOCK_init();
 	usart_sync_init(&USART_1, SERCOM5, (void *)NULL);
 	USART_1_PORT_init();
+}
+
+/**
+ * \brief Timer initialization function
+ *
+ * Enables Timer peripheral, clocks and initializes Timer driver
+ */
+static void TIMER_0_init(void)
+{
+	//tph - uses the 12MHz internal clock divided by 4 = 3Mhz to produce (/75) a 40khz (25us) signal for Motor pwm
+	hri_mclk_set_APBAMASK_TC0_bit(MCLK);
+	hri_gclk_write_PCHCTRL_reg(GCLK, TC0_GCLK_ID, CONF_GCLK_TC0_SRC | (1 << GCLK_PCHCTRL_CHEN_Pos));
+
+	timer_init(&TIMER_0, TC0, _tc_get_timer());
 }
 
 void ETHERNET_MAC_0_PORT_init(void)
@@ -150,13 +126,10 @@ void system_init(void)
 {
 	init_mcu();
 
-	TIMER_0_init();
-
-	TARGET_IO_init();
-
 	USART_0_init();
 
 	USART_1_init();
 
+	TIMER_0_init();
 	ETHERNET_MAC_0_init();
 }

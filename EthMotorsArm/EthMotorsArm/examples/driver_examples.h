@@ -12,13 +12,11 @@
 extern "C" {
 #endif
 
-void TIMER_0_example(void);
-
-void TARGET_IO_example(void);
-
 void USART_0_example(void);
 
 void USART_1_example(void);
+
+void TIMER_0_example(void);
 
 #ifdef __cplusplus
 }

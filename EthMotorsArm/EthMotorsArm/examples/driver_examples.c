@@ -10,7 +10,32 @@
 #include "driver_init.h"
 #include "utils.h"
 
+/**
+ * Example of using USART_0 to write "Hello World" using the IO abstraction.
+ */
+void USART_0_example(void)
+{
+	struct io_descriptor *io;
+	usart_sync_get_io_descriptor(&USART_0, &io);
+	usart_sync_enable(&USART_0);
+
+	io_write(io, (uint8_t *)"Hello World!", 12);
+}
+
+/**
+ * Example of using USART_1 to write "Hello World" using the IO abstraction.
+ */
+void USART_1_example(void)
+{
+	struct io_descriptor *io;
+	usart_sync_get_io_descriptor(&USART_1, &io);
+	usart_sync_enable(&USART_1);
+
+	io_write(io, (uint8_t *)"Hello World!", 12);
+}
+
 static struct timer_task TIMER_0_task1, TIMER_0_task2;
+
 /**
  * Example of using TIMER_0.
  */
@@ -34,40 +59,4 @@ void TIMER_0_example(void)
 	timer_add_task(&TIMER_0, &TIMER_0_task1);
 	timer_add_task(&TIMER_0, &TIMER_0_task2);
 	timer_start(&TIMER_0);
-}
-
-/**
- * Example of using TARGET_IO to write "Hello World" using the IO abstraction.
- */
-void TARGET_IO_example(void)
-{
-	struct io_descriptor *io;
-	usart_sync_get_io_descriptor(&TARGET_IO, &io);
-	usart_sync_enable(&TARGET_IO);
-
-	io_write(io, (uint8_t *)"Hello World!", 12);
-}
-
-/**
- * Example of using USART_0 to write "Hello World" using the IO abstraction.
- */
-void USART_0_example(void)
-{
-	struct io_descriptor *io;
-	usart_sync_get_io_descriptor(&USART_0, &io);
-	usart_sync_enable(&USART_0);
-
-	io_write(io, (uint8_t *)"Hello World!", 12);
-}
-
-/**
- * Example of using USART_1 to write "Hello World" using the IO abstraction.
- */
-void USART_1_example(void)
-{
-	struct io_descriptor *io;
-	usart_sync_get_io_descriptor(&USART_1, &io);
-	usart_sync_enable(&USART_1);
-
-	io_write(io, (uint8_t *)"Hello World!", 12);
 }

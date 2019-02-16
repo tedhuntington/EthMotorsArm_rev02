@@ -82,11 +82,9 @@
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/events.h" IsConfig="false" Hash="hUr+KA59XIxyEvCEHvqMfQ" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils.h" IsConfig="false" Hash="1IxXPPkdgxdipY/hgDJGvg" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_assert.h" IsConfig="false" Hash="x4pgqiWbWCruSdQ+QA1P0A" />
-          <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_decrement_macro.h" IsConfig="false" Hash="DC9VCzX8nB5pfUgCf8d5Uw" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_event.h" IsConfig="false" Hash="+TRsXNENvtynhMSI1iJPZA" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_increment_macro.h" IsConfig="false" Hash="yV2DDykoVCXX+XgiNyG+Sw" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_list.h" IsConfig="false" Hash="60r34J7DkHyqgr2iqa6aXg" />
-          <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_recursion_macro.h" IsConfig="false" Hash="YGFqEpESap+JD+PQbNlIZw" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/include/utils_repeat_macro.h" IsConfig="false" Hash="yidXppbw9HriaIIl6gVfEQ" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/src/utils_assert.c" IsConfig="false" Hash="858+H2i44SFMGhFZ4+PSPw" />
           <AcmeProjectActionInfo Action="File" Source="hal/utils/src/utils_event.c" IsConfig="false" Hash="sR2eRthblYjlO/jHulP6aw" />
@@ -145,15 +143,15 @@
           <AcmeProjectActionInfo Action="File" Source="stdio_redirect/stdio_io.c" IsConfig="false" Hash="Nx8PfIAymK/f5AjLql/CyQ" />
           <AcmeProjectActionInfo Action="File" Source="stdio_redirect/stdio_io.h" IsConfig="false" Hash="4X02f8UL8cjBHeGJM3BnHw" />
           <AcmeProjectActionInfo Action="File" Source="main.c" IsConfig="false" Hash="k0AH7j+BrmdFhBPzCCMptA" />
-          <AcmeProjectActionInfo Action="File" Source="driver_init.c" IsConfig="false" Hash="NNH2NRold2w2Yuul3sKglg" />
-          <AcmeProjectActionInfo Action="File" Source="driver_init.h" IsConfig="false" Hash="QefWgjnsq7TPENlZ1KfdIg" />
-          <AcmeProjectActionInfo Action="File" Source="atmel_start_pins.h" IsConfig="false" Hash="7zXytUIlrz46cgoejsaSww" />
-          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.h" IsConfig="false" Hash="dm4rUTSdLoZj88A4D0z6Og" />
-          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.c" IsConfig="false" Hash="+9uvmBL2wBsLCP07/vEpoA" />
+          <AcmeProjectActionInfo Action="File" Source="driver_init.c" IsConfig="false" Hash="plBCSHNXhUhZdKQ5AIzj/Q" />
+          <AcmeProjectActionInfo Action="File" Source="driver_init.h" IsConfig="false" Hash="5+YsaNsEhCPec15zKkfvQQ" />
+          <AcmeProjectActionInfo Action="File" Source="atmel_start_pins.h" IsConfig="false" Hash="RVmyYqj3bSZXu3kzGtIKlQ" />
+          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.h" IsConfig="false" Hash="Yww3qjGWdJZD+4RHyR0EUQ" />
+          <AcmeProjectActionInfo Action="File" Source="examples/driver_examples.c" IsConfig="false" Hash="q+n+AWJYE59u5pxR7fKOUg" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hal_timer.h" IsConfig="false" Hash="5pZVthtMl40VMvofOld2ng" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hal_usart_sync.h" IsConfig="false" Hash="ZzIGSRyjZuxRzFAtNNt7sw" />
-          <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_calendar.h" IsConfig="false" Hash="Axxal1o5u+cNnytorSIZkA" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_missing_features.h" IsConfig="false" Hash="XsAvpgfutzkw0Y5SydYFaw" />
+          <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_pwm.h" IsConfig="false" Hash="1wL9C0Z542rKOnnyJpZ7Yg" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_reset.h" IsConfig="false" Hash="WwLFRlBtuZ/qnD1JuDKnRQ" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_timer.h" IsConfig="false" Hash="s/0PW0pyF4MQIYZJ6S0wyA" />
           <AcmeProjectActionInfo Action="File" Source="hal/include/hpl_usart_async.h" IsConfig="false" Hash="tBfmk3BN3Q1WbYVoWDbsJw" />
@@ -176,9 +174,9 @@
           <AcmeProjectActionInfo Action="File" Source="hpl/pm/hpl_pm_base.h" IsConfig="false" Hash="KOec1StxUZxY/RKBDbMkpg" />
           <AcmeProjectActionInfo Action="File" Source="hpl/port/hpl_gpio_base.h" IsConfig="false" Hash="d+x/HgDlHjC9REAZe4D1bA" />
           <AcmeProjectActionInfo Action="File" Source="hpl/ramecc/hpl_ramecc.c" IsConfig="false" Hash="pMdmwVWBg16VG8HOwA3DPw" />
-          <AcmeProjectActionInfo Action="File" Source="hpl/rtc/hpl_rtc.c" IsConfig="false" Hash="0HnfU5UF0bwE2z+JQr2hfw" />
-          <AcmeProjectActionInfo Action="File" Source="hpl/rtc/hpl_rtc_base.h" IsConfig="false" Hash="6MZP9mg3QA6lytcm00LePQ" />
           <AcmeProjectActionInfo Action="File" Source="hpl/sercom/hpl_sercom.c" IsConfig="false" Hash="XnaBo+nrPZOJnbUOZmfBmA" />
+          <AcmeProjectActionInfo Action="File" Source="hpl/tc/hpl_tc.c" IsConfig="false" Hash="K821n7/OyoUvRDBdLUvZmg" />
+          <AcmeProjectActionInfo Action="File" Source="hpl/tc/hpl_tc_base.h" IsConfig="false" Hash="gjj5IyaZPy6sUReifzS1GQ" />
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy_main.c" IsConfig="false" Hash="9PnGnZ9Lp45nn37tCwHecg" />
           <AcmeProjectActionInfo Action="File" Source="ethernet_phy_main.h" IsConfig="false" Hash="aH90uRNJljpJSCpSzfmBxw" />
           <AcmeProjectActionInfo Action="File" Source="stdio_start.c" IsConfig="false" Hash="RqMod9NnhK9YNpvUu5IILg" />
@@ -188,14 +186,14 @@
           <AcmeProjectActionInfo Action="File" Source="config/hpl_cmcc_config.h" IsConfig="true" Hash="bmtxQ8rLloaRtAo2HeXZRQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_dmac_config.h" IsConfig="true" Hash="mNec32O7w53e4vDmQlvjCA" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_gclk_config.h" IsConfig="true" Hash="qFfXbIiu7Skw/l5fYsEt7Q" />
-          <AcmeProjectActionInfo Action="File" Source="config/hpl_gmac_config.h" IsConfig="true" Hash="3OJ2VnkFAoAEfiENYO7XTg" />
+          <AcmeProjectActionInfo Action="File" Source="config/hpl_gmac_config.h" IsConfig="true" Hash="g9q3uKuq6CONQbSwjG6yAQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_mclk_config.h" IsConfig="true" Hash="pxBzoQXTG66x4dbzVzxteg" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_osc32kctrl_config.h" IsConfig="true" Hash="HgvzEqDUH4jq/syjj/+G+Q" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_oscctrl_config.h" IsConfig="true" Hash="HO1Z9YoEymQ1BPYP8UeQOQ" />
           <AcmeProjectActionInfo Action="File" Source="config/hpl_port_config.h" IsConfig="true" Hash="q78dOqqSQQP36czagr8gcQ" />
-          <AcmeProjectActionInfo Action="File" Source="config/hpl_rtc_config.h" IsConfig="true" Hash="9Fe6jPSvaDcH9Ejz/4s7XA" />
-          <AcmeProjectActionInfo Action="File" Source="config/hpl_sercom_config.h" IsConfig="true" Hash="DbzJIz6wXlzrtBg5epu/5g" />
-          <AcmeProjectActionInfo Action="File" Source="config/peripheral_clk_config.h" IsConfig="true" Hash="G24SeF9SFkPqHSyiye6eWA" />
+          <AcmeProjectActionInfo Action="File" Source="config/hpl_sercom_config.h" IsConfig="true" Hash="n7A+ViCduInbJtJGJCxp5A" />
+          <AcmeProjectActionInfo Action="File" Source="config/hpl_tc_config.h" IsConfig="true" Hash="0mRYs3rvtel8sHbINTkj9A" />
+          <AcmeProjectActionInfo Action="File" Source="config/peripheral_clk_config.h" IsConfig="true" Hash="e8j05sJOJ3EXNU5KKbOUew" />
           <AcmeProjectActionInfo Action="File" Source="config/ieee8023_mii_standard_config.h" IsConfig="true" Hash="F6MiFC3dRK3mO0hW6lwdbg" />
           <AcmeProjectActionInfo Action="File" Source="config/stdio_redirect_config.h" IsConfig="true" Hash="CKmkBk12sfr7mb+HRQBuzg" />
         </AcmeActionInfos>
@@ -266,8 +264,8 @@
       <Value>../hpl/pm</Value>
       <Value>../hpl/port</Value>
       <Value>../hpl/ramecc</Value>
-      <Value>../hpl/rtc</Value>
       <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
       <Value>../stdio_redirect</Value>
@@ -310,8 +308,8 @@
       <Value>../hpl/pm</Value>
       <Value>../hpl/port</Value>
       <Value>../hpl/ramecc</Value>
-      <Value>../hpl/rtc</Value>
       <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
       <Value>../stdio_redirect</Value>
@@ -336,8 +334,8 @@
       <Value>../hpl/pm</Value>
       <Value>../hpl/port</Value>
       <Value>../hpl/ramecc</Value>
-      <Value>../hpl/rtc</Value>
       <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
       <Value>../stdio_redirect</Value>
@@ -367,26 +365,29 @@
       <Value>../lwip/lwip-1.4.0/port/include</Value>
       <Value>../lwip/lwip-1.4.0/src/include/ipv4</Value>
       <Value>../lwip/lwip-1.4.0/port</Value>
-      <Value>../Config</Value>
-      <Value>../</Value>
-      <Value>../examples</Value>
+      <Value>../stdio_redirect</Value>
+      <Value>../stdio_redirect/gcc</Value>
+      <Value>..</Value>
       <Value>../hal/include</Value>
       <Value>../hal/utils/include</Value>
-      <Value>../hpl/cmcc</Value>
+      <Value>../hri</Value>
+      <Value>../ethernet_phy</Value>
+      <Value>../hpl</Value>
+      <Value>../hpl/port</Value>
+      <Value>../hpl/rtc</Value>
       <Value>../hpl/core</Value>
-      <Value>../hpl/dmac</Value>
       <Value>../hpl/gclk</Value>
+      <Value>../examples</Value>
+      <Value>../Config</Value>
+      <Value>../hpl/cmcc</Value>
+      <Value>../hpl/dmac</Value>
       <Value>../hpl/mclk</Value>
       <Value>../hpl/osc32kctrl</Value>
       <Value>../hpl/oscctrl</Value>
       <Value>../hpl/pm</Value>
-      <Value>../hpl/port</Value>
       <Value>../hpl/ramecc</Value>
-      <Value>../hpl/rtc</Value>
       <Value>../hpl/sercom</Value>
-      <Value>../hri</Value>
-      <Value>../ethernet_phy</Value>
-      <Value>../stdio_redirect</Value>
+      <Value>../hpl/tc</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
@@ -427,8 +428,8 @@
       <Value>../hpl/pm</Value>
       <Value>../hpl/port</Value>
       <Value>../hpl/ramecc</Value>
-      <Value>../hpl/rtc</Value>
       <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
       <Value>../stdio_redirect</Value>
@@ -454,8 +455,8 @@
       <Value>../hpl/pm</Value>
       <Value>../hpl/port</Value>
       <Value>../hpl/ramecc</Value>
-      <Value>../hpl/rtc</Value>
       <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
       <Value>../stdio_redirect</Value>
@@ -500,10 +501,10 @@
     <Compile Include="Config\hpl_port_config.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Config\hpl_rtc_config.h">
+    <Compile Include="Config\hpl_sercom_config.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Config\hpl_sercom_config.h">
+    <Compile Include="Config\hpl_tc_config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Config\ieee8023_mii_standard_config.h">
@@ -596,9 +597,6 @@
     <Compile Include="hal\include\hal_usart_sync.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\include\hpl_calendar.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="hal\include\hpl_cmcc.h">
       <SubType>compile</SubType>
     </Compile>
@@ -636,6 +634,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\include\hpl_missing_features.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\include\hpl_pwm.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\include\hpl_ramecc.h">
@@ -731,9 +732,6 @@
     <Compile Include="hal\utils\include\utils_assert.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\utils\include\utils_decrement_macro.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="hal\utils\include\utils_event.h">
       <SubType>compile</SubType>
     </Compile>
@@ -741,9 +739,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\utils\include\utils_list.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hal\utils\include\utils_recursion_macro.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\utils\include\utils_repeat_macro.h">
@@ -806,13 +801,13 @@
     <Compile Include="hpl\ramecc\hpl_ramecc.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hpl\rtc\hpl_rtc.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hpl\rtc\hpl_rtc_base.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="hpl\sercom\hpl_sercom.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hpl\tc\hpl_tc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hpl\tc\hpl_tc_base.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hri\hri_ac_e53.h">
@@ -1286,6 +1281,12 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="main.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="motor.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="robot_motor_pic_instructions.h">
       <SubType>compile</SubType>
     </Compile>
@@ -1337,8 +1338,8 @@
     <Folder Include="hpl\pm\" />
     <Folder Include="hpl\port\" />
     <Folder Include="hpl\ramecc\" />
-    <Folder Include="hpl\rtc\" />
     <Folder Include="hpl\sercom\" />
+    <Folder Include="hpl\tc\" />
     <Folder Include="hri\" />
     <Folder Include="lwip\" />
     <Folder Include="lwip\lwip-1.4.0\" />
@@ -1357,6 +1358,9 @@
     <Folder Include="lwip\lwip-1.4.0\src\include\netif\" />
     <Folder Include="lwip\lwip-1.4.0\src\netif\" />
     <Folder Include="lwip\lwip-1.4.0\src\netif\ppp\" />
+    <Folder Include="Release\" />
+    <Folder Include="Release\stdio_redirect\" />
+    <Folder Include="Release\stdio_redirect\gcc\" />
     <Folder Include="stdio_redirect\" />
     <Folder Include="stdio_redirect\gcc\" />
   </ItemGroup>
