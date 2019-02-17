@@ -16,21 +16,30 @@
       <Value>../lwip/lwip-1.4.0/port/include</Value>
       <Value>../lwip/lwip-1.4.0/src/include/ipv4</Value>
       <Value>../lwip/lwip-1.4.0/port</Value>
-      <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
-      <Value>../stdio_redirect</Value>
       <Value>../stdio_redirect/gcc</Value>
       <Value>..</Value>
+      <Value>../hpl</Value>
+      <Value>../hpl/rtc</Value>
+      <Value>../Config</Value>
+      <Value>../examples</Value>
       <Value>../hal/include</Value>
       <Value>../hal/utils/include</Value>
+      <Value>../hpl/cmcc</Value>
+      <Value>../hpl/core</Value>
+      <Value>../hpl/dmac</Value>
+      <Value>../hpl/gclk</Value>
+      <Value>../hpl/mclk</Value>
+      <Value>../hpl/osc32kctrl</Value>
+      <Value>../hpl/oscctrl</Value>
+      <Value>../hpl/pm</Value>
+      <Value>../hpl/port</Value>
+      <Value>../hpl/ramecc</Value>
+      <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
       <Value>../hri</Value>
       <Value>../ethernet_phy</Value>
-      <Value>../hpl</Value>
-      <Value>../hpl/port</Value>
-      <Value>../Config</Value>
-      <Value>../hpl/rtc</Value>
-      <Value>../hpl/core</Value>
-      <Value>../hpl/gclk</Value>
-      <Value>../examples</Value>
+      <Value>../stdio_redirect</Value>
+      <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
@@ -55,6 +64,26 @@
   <armgcc.assembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>../Config</Value>
+      <Value>../</Value>
+      <Value>../examples</Value>
+      <Value>../hal/include</Value>
+      <Value>../hal/utils/include</Value>
+      <Value>../hpl/cmcc</Value>
+      <Value>../hpl/core</Value>
+      <Value>../hpl/dmac</Value>
+      <Value>../hpl/gclk</Value>
+      <Value>../hpl/mclk</Value>
+      <Value>../hpl/osc32kctrl</Value>
+      <Value>../hpl/oscctrl</Value>
+      <Value>../hpl/pm</Value>
+      <Value>../hpl/port</Value>
+      <Value>../hpl/ramecc</Value>
+      <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
+      <Value>../hri</Value>
+      <Value>../ethernet_phy</Value>
+      <Value>../stdio_redirect</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
@@ -62,6 +91,26 @@
   <armgcc.preprocessingassembler.general.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>../Config</Value>
+      <Value>../</Value>
+      <Value>../examples</Value>
+      <Value>../hal/include</Value>
+      <Value>../hal/utils/include</Value>
+      <Value>../hpl/cmcc</Value>
+      <Value>../hpl/core</Value>
+      <Value>../hpl/dmac</Value>
+      <Value>../hpl/gclk</Value>
+      <Value>../hpl/mclk</Value>
+      <Value>../hpl/osc32kctrl</Value>
+      <Value>../hpl/oscctrl</Value>
+      <Value>../hpl/pm</Value>
+      <Value>../hpl/port</Value>
+      <Value>../hpl/ramecc</Value>
+      <Value>../hpl/sercom</Value>
+      <Value>../hpl/tc</Value>
+      <Value>../hri</Value>
+      <Value>../ethernet_phy</Value>
+      <Value>../stdio_redirect</Value>
       <Value>%24(PackRepoDir)\Atmel\SAME53_DFP\1.0.75\include</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>

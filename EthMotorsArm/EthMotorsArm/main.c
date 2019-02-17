@@ -525,7 +525,6 @@ int main(void)
 	printf("Ethernet Connection established\n");
 	LWIP_MACIF_init(mac);  //tph: add LWIP callback for recvd input: ethernet_input()
 
-
 	//make this the default interface
 	netif_set_default(&LWIP_MACIF_desc);
 	
