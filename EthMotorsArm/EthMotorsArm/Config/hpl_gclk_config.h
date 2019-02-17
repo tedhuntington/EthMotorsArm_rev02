@@ -159,7 +159,7 @@
 // <i> Indicates whether generic clock 2 configuration is enabled or not
 // <id> enable_gclk_gen_2
 #ifndef CONF_GCLK_GENERATOR_2_CONFIG
-#define CONF_GCLK_GENERATOR_2_CONFIG 1
+#define CONF_GCLK_GENERATOR_2_CONFIG 0
 #endif
 
 // <h> Generic Clock Generator Control
@@ -197,7 +197,7 @@
 // <i> Indicates whether Output Enable is enabled or not
 // <id> gclk_arch_gen_2_oe
 #ifndef CONF_GCLK_GEN_2_OE
-#define CONF_GCLK_GEN_2_OE 0
+#define CONF_GCLK_GEN_2_OE 1
 #endif
 
 // <q> Output Off Value
@@ -218,7 +218,7 @@
 // <i> Indicates whether Generic Clock Generator Enable is enabled or not
 // <id> gclk_arch_gen_2_enable
 #ifndef CONF_GCLK_GEN_2_GENEN
-#define CONF_GCLK_GEN_2_GENEN 1
+#define CONF_GCLK_GEN_2_GENEN 0
 #endif
 // </h>
 
@@ -226,7 +226,7 @@
 //<o> Generic clock generator 2 division <0x0000-0xFFFF>
 // <id> gclk_gen_2_div
 #ifndef CONF_GCLK_GEN_2_DIV
-#define CONF_GCLK_GEN_2_DIV 30
+#define CONF_GCLK_GEN_2_DIV 6
 #endif
 // </h>
 // </e>

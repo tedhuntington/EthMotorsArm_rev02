@@ -41,7 +41,7 @@
 
 // <i> Select the clock source for CORE.
 #ifndef CONF_GCLK_SERCOM1_CORE_SRC
-#define CONF_GCLK_SERCOM1_CORE_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
+#define CONF_GCLK_SERCOM1_CORE_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
 #endif
 
 // <y> Slow Clock Source
@@ -73,7 +73,7 @@
 
 // <i> Select the slow clock source.
 #ifndef CONF_GCLK_SERCOM1_SLOW_SRC
-#define CONF_GCLK_SERCOM1_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK3_Val
+#define CONF_GCLK_SERCOM1_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
 #endif
 
 /**
@@ -81,7 +81,7 @@
  * \brief SERCOM1's Core Clock frequency
  */
 #ifndef CONF_GCLK_SERCOM1_CORE_FREQUENCY
-#define CONF_GCLK_SERCOM1_CORE_FREQUENCY 400000
+#define CONF_GCLK_SERCOM1_CORE_FREQUENCY 2000000
 #endif
 
 /**
@@ -89,7 +89,7 @@
  * \brief SERCOM1's Slow Clock frequency
  */
 #ifndef CONF_GCLK_SERCOM1_SLOW_FREQUENCY
-#define CONF_GCLK_SERCOM1_SLOW_FREQUENCY 32768
+#define CONF_GCLK_SERCOM1_SLOW_FREQUENCY 2000000
 #endif
 
 // <y> Core Clock Source
@@ -121,7 +121,7 @@
 
 // <i> Select the clock source for CORE.
 #ifndef CONF_GCLK_SERCOM5_CORE_SRC
-#define CONF_GCLK_SERCOM5_CORE_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
+#define CONF_GCLK_SERCOM5_CORE_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
 #endif
 
 // <y> Slow Clock Source
@@ -153,7 +153,7 @@
 
 // <i> Select the slow clock source.
 #ifndef CONF_GCLK_SERCOM5_SLOW_SRC
-#define CONF_GCLK_SERCOM5_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK3_Val
+#define CONF_GCLK_SERCOM5_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
 #endif
 
 /**
@@ -161,7 +161,7 @@
  * \brief SERCOM5's Core Clock frequency
  */
 #ifndef CONF_GCLK_SERCOM5_CORE_FREQUENCY
-#define CONF_GCLK_SERCOM5_CORE_FREQUENCY 400000
+#define CONF_GCLK_SERCOM5_CORE_FREQUENCY 2000000
 #endif
 
 /**
@@ -169,7 +169,7 @@
  * \brief SERCOM5's Slow Clock frequency
  */
 #ifndef CONF_GCLK_SERCOM5_SLOW_FREQUENCY
-#define CONF_GCLK_SERCOM5_SLOW_FREQUENCY 32768
+#define CONF_GCLK_SERCOM5_SLOW_FREQUENCY 2000000
 #endif
 
 // <y> TC Clock Source
@@ -201,7 +201,7 @@
 
 // <i> Select the clock source for TC.
 #ifndef CONF_GCLK_TC0_SRC
-#define CONF_GCLK_TC0_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
+#define CONF_GCLK_TC0_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
 #endif
 
 /**
@@ -209,7 +209,7 @@
  * \brief TC0's Clock frequency
  */
 #ifndef CONF_GCLK_TC0_FREQUENCY
-#define CONF_GCLK_TC0_FREQUENCY 400000
+#define CONF_GCLK_TC0_FREQUENCY 2000000
 #endif
 
 // <<< end of configuration section >>>

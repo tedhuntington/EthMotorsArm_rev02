@@ -22,17 +22,15 @@ extern "C" {
 #include <hal_sleep.h>
 
 #include <hal_usart_sync.h>
-
-#include <hal_usart_sync.h>
+#include <hal_usart_async.h>
 #include <hal_timer.h>
 #include <hpl_tc_base.h>
 
 #include <hal_mac_async.h>
 
-extern struct usart_sync_descriptor USART_0;
-
-extern struct usart_sync_descriptor USART_1;
-extern struct timer_descriptor      TIMER_0;
+extern struct usart_sync_descriptor  USART_0;
+extern struct usart_async_descriptor USART_1;
+extern struct timer_descriptor       TIMER_0;
 
 extern struct mac_async_descriptor ETHERNET_MAC_0;
 

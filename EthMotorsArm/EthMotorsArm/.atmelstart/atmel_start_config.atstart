@@ -601,7 +601,7 @@ drivers:
       enable_gclk_gen_1: true
       enable_gclk_gen_10: false
       enable_gclk_gen_11: false
-      enable_gclk_gen_2: true
+      enable_gclk_gen_2: false
       enable_gclk_gen_3: true
       enable_gclk_gen_4: false
       enable_gclk_gen_5: false
@@ -629,9 +629,9 @@ drivers:
       gclk_arch_gen_1_oe: true
       gclk_arch_gen_1_oov: false
       gclk_arch_gen_1_runstdby: false
-      gclk_arch_gen_2_enable: true
+      gclk_arch_gen_2_enable: false
       gclk_arch_gen_2_idc: false
-      gclk_arch_gen_2_oe: false
+      gclk_arch_gen_2_oe: true
       gclk_arch_gen_2_oov: false
       gclk_arch_gen_2_runstdby: false
       gclk_arch_gen_3_enable: true
@@ -681,7 +681,7 @@ drivers:
       gclk_gen_1_div: 6
       gclk_gen_1_div_sel: false
       gclk_gen_1_oscillator: External Crystal Oscillator 8-48MHz (XOSC0)
-      gclk_gen_2_div: 30
+      gclk_gen_2_div: 6
       gclk_gen_2_div_sel: false
       gclk_gen_2_oscillator: External Crystal Oscillator 8-48MHz (XOSC0)
       gclk_gen_3_div: 1
@@ -940,21 +940,21 @@ drivers:
       domain_group:
         nodes:
         - name: Core
-          input: Generic clock generator 2
+          input: Generic clock generator 1
           external: false
           external_frequency: 0
         - name: Slow
-          input: Generic clock generator 3
+          input: Generic clock generator 1
           external: false
           external_frequency: 0
         configuration:
-          core_gclk_selection: Generic clock generator 2
-          slow_gclk_selection: Generic clock generator 3
+          core_gclk_selection: Generic clock generator 1
+          slow_gclk_selection: Generic clock generator 1
   USART_1:
     user_label: USART_1
-    definition: Atmel:SAME53_Drivers:0.0.1::SAME53N20A-AF::SERCOM5::driver_config_definition::UART::HAL:Driver:USART.Sync
+    definition: Atmel:SAME53_Drivers:0.0.1::SAME53N20A-AF::SERCOM5::driver_config_definition::UART::HAL:Driver:USART.Async
     functionality: USART
-    api: HAL:Driver:USART_Sync
+    api: HAL:Driver:USART_Async
     configuration:
       usart_advanced: false
       usart_arch_clock_mode: USART with internal clock
@@ -989,16 +989,16 @@ drivers:
       domain_group:
         nodes:
         - name: Core
-          input: Generic clock generator 2
+          input: Generic clock generator 1
           external: false
           external_frequency: 0
         - name: Slow
-          input: Generic clock generator 3
+          input: Generic clock generator 1
           external: false
           external_frequency: 0
         configuration:
-          core_gclk_selection: Generic clock generator 2
-          slow_gclk_selection: Generic clock generator 3
+          core_gclk_selection: Generic clock generator 1
+          slow_gclk_selection: Generic clock generator 1
   TIMER_0:
     user_label: TIMER_0
     definition: Atmel:SAME53_Drivers:0.0.1::SAME53N20A-AF::TC0::driver_config_definition::Timer::HAL:Driver:Timer
@@ -1025,11 +1025,11 @@ drivers:
       domain_group:
         nodes:
         - name: TC
-          input: Generic clock generator 2
+          input: Generic clock generator 1
           external: false
           external_frequency: 0
         configuration:
-          tc_gclk_selection: Generic clock generator 2
+          tc_gclk_selection: Generic clock generator 1
   ETHERNET_MAC_0:
     user_label: ETHERNET_MAC_0
     definition: Atmel:SAME53_Drivers:0.0.1::SAME53N20A-AF::GMAC::driver_config_definition::GMAC::HAL:Driver:GMAC.Async

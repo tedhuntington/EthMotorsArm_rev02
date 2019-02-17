@@ -101,10 +101,12 @@ C_SRCS +=  \
 ../hal/src/hal_mac_async.c \
 ../hal/src/hal_sleep.c \
 ../hal/src/hal_timer.c \
+../hal/src/hal_usart_async.c \
 ../hal/src/hal_usart_sync.c \
 ../hal/utils/src/utils_assert.c \
 ../hal/utils/src/utils_event.c \
 ../hal/utils/src/utils_list.c \
+../hal/utils/src/utils_ringbuffer.c \
 ../hal/utils/src/utils_syscalls.c \
 ../hpl/cmcc/hpl_cmcc.c \
 ../hpl/core/hpl_core_m4.c \
@@ -205,10 +207,12 @@ hal/src/hal_io.o \
 hal/src/hal_mac_async.o \
 hal/src/hal_sleep.o \
 hal/src/hal_timer.o \
+hal/src/hal_usart_async.o \
 hal/src/hal_usart_sync.o \
 hal/utils/src/utils_assert.o \
 hal/utils/src/utils_event.o \
 hal/utils/src/utils_list.o \
+hal/utils/src/utils_ringbuffer.o \
 hal/utils/src/utils_syscalls.o \
 hpl/cmcc/hpl_cmcc.o \
 hpl/core/hpl_core_m4.o \
@@ -302,10 +306,12 @@ hal/src/hal_io.o \
 hal/src/hal_mac_async.o \
 hal/src/hal_sleep.o \
 hal/src/hal_timer.o \
+hal/src/hal_usart_async.o \
 hal/src/hal_usart_sync.o \
 hal/utils/src/utils_assert.o \
 hal/utils/src/utils_event.o \
 hal/utils/src/utils_list.o \
+hal/utils/src/utils_ringbuffer.o \
 hal/utils/src/utils_syscalls.o \
 hpl/cmcc/hpl_cmcc.o \
 hpl/core/hpl_core_m4.o \
@@ -399,10 +405,12 @@ hal/src/hal_io.d \
 hal/src/hal_mac_async.d \
 hal/src/hal_sleep.d \
 hal/src/hal_timer.d \
+hal/src/hal_usart_async.d \
 hal/src/hal_usart_sync.d \
 hal/utils/src/utils_assert.d \
 hal/utils/src/utils_event.d \
 hal/utils/src/utils_list.d \
+hal/utils/src/utils_ringbuffer.d \
 hal/utils/src/utils_syscalls.d \
 hpl/cmcc/hpl_cmcc.d \
 hpl/core/hpl_core_m4.d \
@@ -496,10 +504,12 @@ hal/src/hal_io.d \
 hal/src/hal_mac_async.d \
 hal/src/hal_sleep.d \
 hal/src/hal_timer.d \
+hal/src/hal_usart_async.d \
 hal/src/hal_usart_sync.d \
 hal/utils/src/utils_assert.d \
 hal/utils/src/utils_event.d \
 hal/utils/src/utils_list.d \
+hal/utils/src/utils_ringbuffer.d \
 hal/utils/src/utils_syscalls.d \
 hpl/cmcc/hpl_cmcc.d \
 hpl/core/hpl_core_m4.d \
@@ -710,6 +720,13 @@ hal/src/hal_timer.o: ../hal/src/hal_timer.c
 	@echo Finished building: $<
 	
 
+hal/src/hal_usart_async.o: ../hal/src/hal_usart_async.c
+	@echo Building file: $<
+	@echo Invoking: ARM/GNU C Compiler : 6.3.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAME53N20A__ -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\arm\cmsis\5.0.1\CMSIS\Include" -I"../lwip/lwip-1.4.0/src/include" -I"../lwip/lwip-1.4.0/port/include" -I"../lwip/lwip-1.4.0/src/include/ipv4" -I"../lwip/lwip-1.4.0/port" -I"../stdio_redirect/gcc" -I".." -I"../hpl" -I"../hpl/rtc" -I"../Config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/cmcc" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/ramecc" -I"../hpl/sercom" -I"../hpl/tc" -I"../hri" -I"../ethernet_phy" -I"../stdio_redirect" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\SAME53_DFP\1.0.75\include"  -O1 -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m4 -c -std=gnu99 -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 hal/src/hal_usart_sync.o: ../hal/src/hal_usart_sync.c
 	@echo Building file: $<
 	@echo Invoking: ARM/GNU C Compiler : 6.3.1
@@ -732,6 +749,13 @@ hal/utils/src/utils_event.o: ../hal/utils/src/utils_event.c
 	
 
 hal/utils/src/utils_list.o: ../hal/utils/src/utils_list.c
+	@echo Building file: $<
+	@echo Invoking: ARM/GNU C Compiler : 6.3.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAME53N20A__ -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\arm\cmsis\5.0.1\CMSIS\Include" -I"../lwip/lwip-1.4.0/src/include" -I"../lwip/lwip-1.4.0/port/include" -I"../lwip/lwip-1.4.0/src/include/ipv4" -I"../lwip/lwip-1.4.0/port" -I"../stdio_redirect/gcc" -I".." -I"../hpl" -I"../hpl/rtc" -I"../Config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/cmcc" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/ramecc" -I"../hpl/sercom" -I"../hpl/tc" -I"../hri" -I"../ethernet_phy" -I"../stdio_redirect" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\SAME53_DFP\1.0.75\include"  -O1 -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m4 -c -std=gnu99 -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+hal/utils/src/utils_ringbuffer.o: ../hal/utils/src/utils_ringbuffer.c
 	@echo Building file: $<
 	@echo Invoking: ARM/GNU C Compiler : 6.3.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAME53N20A__ -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\arm\cmsis\5.0.1\CMSIS\Include" -I"../lwip/lwip-1.4.0/src/include" -I"../lwip/lwip-1.4.0/port/include" -I"../lwip/lwip-1.4.0/src/include/ipv4" -I"../lwip/lwip-1.4.0/port" -I"../stdio_redirect/gcc" -I".." -I"../hpl" -I"../hpl/rtc" -I"../Config" -I"../examples" -I"../hal/include" -I"../hal/utils/include" -I"../hpl/cmcc" -I"../hpl/core" -I"../hpl/dmac" -I"../hpl/gclk" -I"../hpl/mclk" -I"../hpl/osc32kctrl" -I"../hpl/oscctrl" -I"../hpl/pm" -I"../hpl/port" -I"../hpl/ramecc" -I"../hpl/sercom" -I"../hpl/tc" -I"../hri" -I"../ethernet_phy" -I"../stdio_redirect" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\SAME53_DFP\1.0.75\include"  -O1 -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m4 -c -std=gnu99 -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
