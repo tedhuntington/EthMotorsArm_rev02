@@ -81,7 +81,7 @@ void USART_1_PORT_init()
 void USART_1_init(void)
 {
 	USART_1_CLOCK_init();
-	//usart_async_init(&USART_1, SERCOM5, USART_1_buffer, USART_1_BUFFER_SIZE, (void *)NULL);
+	usart_async_init(&USART_1, SERCOM5, USART_1_buffer, USART_1_BUFFER_SIZE, (void *)NULL);
 	USART_1_PORT_init();
 }
 
@@ -614,7 +614,7 @@ void system_init(void)
 	                   // <id> pad_initial_level
 	                   // <false"> Low
 	                   // <true"> High
-	                   false);
+	                   true);
 
 	// Set pin direction to output
 	gpio_set_pin_direction(PC14, GPIO_DIRECTION_OUT);
@@ -680,6 +680,6 @@ void system_init(void)
 	USART_0_init();
 	USART_1_init();
 
-	//TIMER_0_init();
+	TIMER_0_init();
 	ETHERNET_MAC_0_init();
 }

@@ -59,9 +59,9 @@ void usart0_receive_cb(struct mac_async_descriptor *desc)
 	gmac_recv_flag = true;
 	//printf("rx ");
 	gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
-	//delay_ms(1);
+	delay_ms(1);
 	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
-	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
+	gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
 }
 
 
@@ -195,10 +195,7 @@ static void MotorTimerTask_cb(const struct timer_task *const timer_task)
 				}//if (Motor[i].Direction) {
 
 				//pulse the pulse pin if necessary
-				if (Motor[i].flags&MOTOR_DRIVER_USES_PULSE_PIN) {
-					gpio_set_pin_level(Motor[i].PulsePin,true);
-					//*Motor[i].PulsePort|=Motor[i].PulseBit;
-				}//if (Motor[i].flags&MOTOR_DRIVER_USES_PULSE_PIN) {
+				gpio_set_pin_level(Motor[i].PulsePin,true);
 			} else {  //if (Motor[i].StrengthCount<Motor[i].Strength)
 			
 				//in "off" part of duty cycle (or first run of a motor instruction)
@@ -287,10 +284,10 @@ void SendMotorInst(uint8_t *MInst)
     }
 
     //set motor turn strength- number of timer clocks in "on" part of duty cycle
-    //0=stop 0x7=full speed (NumClkInDutyCycle)
-    //this number if multiplied by the NumClocksInMotorDutyCycle/7
-    //so for strength=1, Strength*NumClocksInMotorDutyCycle/7 (1 clks of 7 are on)
-    //for strength=7 the motor is on for every clock (7 of 7)
+    //0=stop 20=full speed (NumClkInDutyCycle)
+    //this number is multiplied by the NumClocksInMotorDutyCycle/20
+    //so for strength=1, Strength*NumClocksInMotorDutyCycle/20 (1 clks of 20 are on)
+    //for strength=20 the motor is on for every clock (20 of 20)
     //Motor[MotorNum].Strength=((MInst[0]&0x07)*NumClocksInMotorDutyCycle)/ROBOT_MOTORS_DEFAULT_NUM_CLKS_IN_MOTOR_DUTY_CYCLE;
     Strength=(MInst[1]&0x7f);//max is currently 0 to 127
     //if strength is higher than the number of possible speeds, set at maximum strength
@@ -303,46 +300,32 @@ void SendMotorInst(uint8_t *MInst)
     Duration=(uint32_t)((MInst[3]<<8)+MInst[2]);
     //duration from user is in ms, so convert to timer interrupts:
     //Motor[MotorNum].Duration is in timer interrupts 
-    //MotorDutyCycleClock is 25us by default (40khz) /2 = every 12.5us
-    //so convert Duration into time interrupt units (how many 12.5us units)
+    //MotorDutyCycleClock is 25us by default (40khz)  = every 25us
+    //so convert Duration into time interrupt units (how many 25us units)
 
     //if Duration*1000 < 127*MotorDutyCycleClock then Strength needs to be scaled down
     //because the entire duty cycle of the motor will be < 127.
     //ex: DurTime=1ms, MDCC=25us DurInts=1000/25=only 40 so if strength=127/2=63, that needs to be scaled down to 63/127=x/40
     //x=63*40/127=19 so 19 timer interrupts will be on, and 21 off for a total of 40x25us=1ms
 
-    //convert ms to 12.5us units
+    //convert ms to 25us units
     //so Duration of 100ms in 25uS units=0.1/0.000025=4000 clocks * 2= 8000
-    //in us: (100)*1000/25=4000 * 2 8000, so generalizing in us:
-    //Duration*2000/MotorDutyCycle = number of TimerInterrupts for 
+    //in us: (100)*1000/25=4000, so generalizing in us:
+    //Duration*1000/MotorDutyCycle = number of TimerInterrupts for 
     //user sent Duration in ms.
-    Duration*=2000; //Duration is divided by MotorDutyCycleClock below
-    //MotorDutyCycleClock is in ms so multiply Duration x 1000 and 
-    //x2 for on+off here.
-/*
- //    
-    if (Duration/MotorDutyCycleClock < NumClocksInMotorDutyCycle) {  //(Duration/25<127)
-        //strength needs to be scaled down 
-        //at 40khz (25us) a pulse:
-        //1/10 speed gives a duty cycle of 127*25us=3.175ms, 
-        //so if the motor duration is < 3.175ms, the strength needs to be
-        //scaled down.
-        //(probably this will not ever happen since the minimum reaction time of the robot is currently 10ms 
-        //which is 100000/25=4000 timer interrupts. Note that at 1/2 speed the PWM would be 63on 63off x 3
-        //but not all pwm will work out perfectly, for example for duration = 3ms: 3000/25= 120 so 63on but only 57 off
-        //- although the motor is then off after. 
-        // with 127 speeds: 1/10 speed is 12on 115off = 300us on  2875us off
-        // with   7 speeds: 1/10 speed is  1on   6off =  25us on   150us off 
-        //so probably a lower number of speeds is better, for example: 20-40 speeds
-        Strength=(Strength*Duration)/(NumClocksInMotorDutyCycle*MotorDutyCycleClock);
-        //ex: 63*1000/127*25 = 19 timer interrupts of the 1000/25=40 total duty cycle interrupts
-    }
-*/
+    Duration*=1000; //Duration is divided by MotorDutyCycleClock below
+    //MotorDutyCycleClock is in ms so multiply Duration x 1000 
+	
+    //at 40khz (25us) a pulse:
+	//duty cycle is 25us*20=500us
+	//so 1/20 speed is 25us on 475us off (shortest pulse possible for drv8800- 40khz)
+	//   19/20 speed is 475us on 25us off
+
     Motor[MotorNum].Strength=Strength;
     Motor[MotorNum].StrengthCount=0;
 
     //Convert duration in us to duration in number of timer interrupts
-    //since multiplying by 2000 above, I doubt Duration would ever be < MotorDutyCycleClock
+    //since multiplying by 1000 above, I doubt Duration would ever be < MotorDutyCycleClock
     //but just as a failsafe in case Motor[].Duration somehow will get set to 0]
     //and somebody is trying to set strength=0 - probably not needed
     if ((Duration/MotorDutyCycleClock)==0 && Duration>0) {
@@ -439,7 +422,7 @@ int InitializeMotors(void)
 	//Clear the robot status array
 	memset(Motor,sizeof(MotorStatus)*NumMotors,0);
 
-
+	//Motor[0].flags|=MOTOR_DRIVER_USES_PULSE_PIN;
 	Motor[0].DirPin=GPIO(GPIO_PORTB, 13);
 	Motor[0].PulsePin=GPIO(GPIO_PORTB, 12);
 	gpio_set_pin_direction(Motor[0].DirPin,GPIO_DIRECTION_OUT);
@@ -447,6 +430,8 @@ int InitializeMotors(void)
 	gpio_set_pin_direction(Motor[0].PulsePin,GPIO_DIRECTION_OUT);
 	gpio_set_pin_level(Motor[0].PulsePin,false);
 	
+//	Motor[1].DirPin=GPIO(GPIO_PORTB, 11); //13);
+//	Motor[1].PulsePin=GPIO(GPIO_PORTB, 10);//12);
 
 	return(1);
 } //int InitializeMotors(void)
@@ -470,6 +455,15 @@ int main(void)
 	// Set pin direction to output
 	//gpio_set_pin_direction(LED0, GPIO_DIRECTION_OUT);
 	//gpio_set_pin_function(LED0, GPIO_PIN_FUNCTION_OFF);
+
+	/* Read MacAddress from EEPROM */  //tph: currently just adding a valid public MAC address
+	read_macaddress(mac);
+
+	systick_enable();
+
+	//MACIF_example();
+	
+	ETHERNET_PHY_0_example();  //restarts autonegotiation
 
 	//init usart
 	usart_sync_get_io_descriptor(&USART_0, &io);
@@ -496,19 +490,11 @@ int main(void)
 	//sprintf((char *)OutStr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n");
 	//io_write(io,OutStr,strlen(OutStr));
 
-	/* Read MacAddress from EEPROM */  //tph: currently just adding a valid public MAC address
-	read_macaddress(mac);
-
-	systick_enable();
-
-	//MACIF_example();
-	
-	ETHERNET_PHY_0_example();  //restarts autonegotiation
-
 
 
 	printf("\r\nHello ATMEL World!\r\n");
 	//fflush(stdio_io);
+
 	//below does not work for printf because printf calls _puts_r which must send one char at a time 
 	//while (usart_async_get_status(&USART_0, &iostat)==ERR_BUSY); 
 
@@ -618,7 +604,7 @@ int main(void)
 
 	InitializeMotors(); //set initial settings of all motors
 	//currently motor timer stop DHCP from working
-	//MotorTimer_Initialize();  //start timer for motor pwm
+	MotorTimer_Initialize();  //start timer for motor pwm
 
 	/* Replace with your application code */
 	while (true) {

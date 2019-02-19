@@ -41,7 +41,7 @@
 
 // <i> Select the clock source for CORE.
 #ifndef CONF_GCLK_SERCOM1_CORE_SRC
-#define CONF_GCLK_SERCOM1_CORE_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
+#define CONF_GCLK_SERCOM1_CORE_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
 #endif
 
 // <y> Slow Clock Source
@@ -73,7 +73,7 @@
 
 // <i> Select the slow clock source.
 #ifndef CONF_GCLK_SERCOM1_SLOW_SRC
-#define CONF_GCLK_SERCOM1_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
+#define CONF_GCLK_SERCOM1_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
 #endif
 
 /**
@@ -121,7 +121,7 @@
 
 // <i> Select the clock source for CORE.
 #ifndef CONF_GCLK_SERCOM5_CORE_SRC
-#define CONF_GCLK_SERCOM5_CORE_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
+#define CONF_GCLK_SERCOM5_CORE_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
 #endif
 
 // <y> Slow Clock Source
@@ -153,7 +153,7 @@
 
 // <i> Select the slow clock source.
 #ifndef CONF_GCLK_SERCOM5_SLOW_SRC
-#define CONF_GCLK_SERCOM5_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
+#define CONF_GCLK_SERCOM5_SLOW_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
 #endif
 
 /**
@@ -201,7 +201,7 @@
 
 // <i> Select the clock source for TC.
 #ifndef CONF_GCLK_TC0_SRC
-#define CONF_GCLK_TC0_SRC GCLK_PCHCTRL_GEN_GCLK1_Val
+#define CONF_GCLK_TC0_SRC GCLK_PCHCTRL_GEN_GCLK2_Val
 #endif
 
 /**
