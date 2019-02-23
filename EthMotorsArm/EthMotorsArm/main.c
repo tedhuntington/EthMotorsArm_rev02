@@ -15,6 +15,7 @@
 #include <robot_motor_pic_instructions.h>
 #include <main.h>
 #include <motor.h>  //motor data structures (motor port values and masks, duration, and program data structure)
+#include <utils_ringbuffer.h> //needed for esp-01 usart
 
 #define PCB_NAME_LENGTH 5
 static const char *PCB_Name = "Motor";
@@ -54,14 +55,31 @@ void systick_enable(void)
 	SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
 }
 
-void usart0_receive_cb(struct mac_async_descriptor *desc)
+void usart1_receive_cb(const struct usart_async_descriptor *const io_descr)
 {
-	gmac_recv_flag = true;
-	//printf("rx ");
-	gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
-	delay_ms(1);
-	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
-	gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
+	struct io_descriptor *io_in,*io_out; 
+	u8_t buffer[256];
+	int NumChars;
+	
+	//printf("u1 ");
+	usart_async_get_io_descriptor(&USART_1, &io_in);
+	usart_sync_get_io_descriptor(&USART_1, &io_out);
+	//CRITICAL_SECTION_ENTER()
+	if (usart_async_is_rx_not_empty(&USART_1)) {
+//	printf("%s",&io_descr->rx.buf[io_descr->rx.read_index]);
+		NumChars=ringbuffer_num(&io_descr->rx);
+		io_read(io_in, (uint8_t *)&buffer,NumChars);
+		buffer[NumChars]=0; //terminal string
+		//io_write(io_out, (uint8_t *)&buffer,1);
+		printf("%s",buffer);
+	} //if (usart_async_is_rx_not_empty(USART_1)) {
+	//CRITICAL_SECTION_LEAVE()
+
+}
+
+
+void usart0_receive_cb(const struct usart_async_descriptor *const io_descr)
+{
 }
 
 
@@ -70,9 +88,9 @@ void mac_receive_cb(struct mac_async_descriptor *desc)
 	gmac_recv_flag = true;
 	//printf("rx ");
 	gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
-	//delay_ms(1);
+	delay_ms(1);
 	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,false);
-	//gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
+	gpio_set_pin_level(PHY_YELLOW_LED_PIN,true);
 }
 
 void mac_transmit_cb(struct mac_async_descriptor *desc)
@@ -347,13 +365,16 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 	uint8_t *InstData; //pointer to udp data (instruction)
 	uint8_t *ReturnInst; //currently just 50 bytes but probably will change
 	struct pbuf *retbuf;  //return buffer
-	int ReturnInstLen;
+	int InstLen,ReturnInstLen;
 	uint8_t MotorInst[4];  //motor instruction
-
+	struct io_descriptor *io; //for ESP-01 UART1
+	uint8_t buffer[256]; //temporary buffer
+	
 	//printf("received at %d, echoing to the same port\n",pcb->local_port);
 	//dst_ip = &(pcb->remote_ip); // this is zero always
 	if (p != NULL) {
-		printf("UDP rcv %d bytes: ", (*p).len);
+		//printf("UDP rcv %d bytes: ", (*p).len);
+		printf("%d\n", (*p).len);
 		//    	  for (i = 0; i < (*p).len; ++i)
 		//			printf("%c",((char*)(*p).payload)[i]);
 		//    	printf("\n");
@@ -365,6 +386,7 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 			//printf("port: %d\n", pcb->local_port);
 			
 			InstData=(uint8_t *)(*p).payload;  //shorthand to data
+			InstLen=(*p).len;
 			switch(InstData[4]) //Robot Instruction
 			{
 			case ROBOT_MOTORS_TEST: //send back 0x12345678
@@ -401,6 +423,13 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 				MotorInst[3]=InstData[8];  //duration high byte
 				SendMotorInst(MotorInst);
 			break; 
+			case ROBOT_MOTORS_TEST_WIFI:				
+				usart_async_get_io_descriptor(&USART_1, &io);
+				memcpy(buffer,&InstData[5],InstLen-5);
+				buffer[InstLen-5]=0; //terminate string
+				printf("%s",buffer);
+				io_write(io, (uint8_t *)&InstData[5], InstLen-5);
+			break;
 			} //switch
 
 		} //if (pcb->local_port==UDP_PORT) {
@@ -447,7 +476,7 @@ int main(void)
 	u8_t ReadBuffer[256];
 	//struct usart_async_status iostat;  //currently needed for usart async
 
-	/* Initializes MCU, drivers and middleware - tph - inits phy*/
+	/* Initializes MCU, drivers and middleware - tph - inits phy and uarts*/
 	atmel_start_init();
 
 	//initialize user gpio pins	
@@ -455,6 +484,12 @@ int main(void)
 	// Set pin direction to output
 	//gpio_set_pin_direction(LED0, GPIO_DIRECTION_OUT);
 	//gpio_set_pin_function(LED0, GPIO_PIN_FUNCTION_OFF);
+
+//USART_ASYNC_TXC_CB
+	usart_async_register_callback(&USART_1, USART_ASYNC_RXC_CB, usart1_receive_cb);
+	usart_async_enable(&USART_1);
+
+
 
 	/* Read MacAddress from EEPROM */  //tph: currently just adding a valid public MAC address
 	read_macaddress(mac);

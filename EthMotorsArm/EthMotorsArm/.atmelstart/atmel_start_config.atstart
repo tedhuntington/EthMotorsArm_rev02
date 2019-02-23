@@ -4,7 +4,7 @@ versions:
   api: '1.0'
   backend: 1.5.122
   commit: 820baecf7dd115d94b0d42ee3b0b9d6ba2da7113
-  content: 1.0.1375
+  content: 1.0.1405
   content_pack_name: acme-packs-all
   format: '2'
   frontend: 1.5.1826
@@ -920,7 +920,7 @@ drivers:
       usart_arch_sampa: 7-8-9 (3-4-5 8-bit over-sampling)
       usart_arch_sampr: 16x arithmetic
       usart_arch_sfde: false
-      usart_baud_rate: 9600
+      usart_baud_rate: 115200
       usart_character_size: 8 bits
       usart_parity: No parity
       usart_rx_enable: true
@@ -969,7 +969,7 @@ drivers:
       usart_arch_sampa: 7-8-9 (3-4-5 8-bit over-sampling)
       usart_arch_sampr: 16x arithmetic
       usart_arch_sfde: false
-      usart_baud_rate: 9600
+      usart_baud_rate: 115200
       usart_character_size: 8 bits
       usart_parity: No parity
       usart_rx_enable: true

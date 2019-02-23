@@ -40,3 +40,5 @@
 #define ROBOT_MOTORS_SEND_CURRENT_SENSE 0x2e  //send motor current sense A2D reading(s)
 #define ROBOT_MOTORS_STOP_SENDING_CURRENT_SENSE 0x2f  //stop sending motor current sense A2D readings
 #define ROBOT_MOTORS_STOP_ALL_MOTORS 0x30 //stop all motors
+//WIFI (ESP8266/ESP-01)
+#define ROBOT_MOTORS_TEST_WIFI 0x40 //test to see if wifi esp-01 module is connected and responding
