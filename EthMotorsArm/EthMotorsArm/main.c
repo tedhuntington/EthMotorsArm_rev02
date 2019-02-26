@@ -55,28 +55,75 @@ void systick_enable(void)
 	SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
 }
 
+
+// Last entry in ring buffer (ring buffer found at io_descr->rx in callback).
+// Can be used for parsing in the call back.
+uint8_t ringbuffer_last(struct ringbuffer const *const rb)
+{
+    ASSERT(rb);
+
+    uint8_t data = rb->buf[(rb->write_index-1) & rb->size];
+
+    return data;
+}
+
+volatile bool line_available = false;
 void usart1_receive_cb(const struct usart_async_descriptor *const io_descr)
 {
-	struct io_descriptor *io_in,*io_out; 
-	u8_t buffer[256];
-	int NumChars;
+//	struct io_descriptor *io_in,*io_out; 
+//	u8_t buffer[256];
+//	int NumChars;
+	
+	/* Read transfer completed */
+	if (io_descr->rx.size>14) {
+		line_available=true;
+	}
+//    if( ringbuffer_last(&io_descr->rx) == 10 ) {
+ //       line_available = true;
+//	}
 	
 	//printf("u1 ");
-	usart_async_get_io_descriptor(&USART_1, &io_in);
-	usart_sync_get_io_descriptor(&USART_1, &io_out);
+//	usart_async_get_io_descriptor(&USART_1, &io_in);
+//	usart_sync_get_io_descriptor(&USART_1, &io_out);
 	//CRITICAL_SECTION_ENTER()
-	if (usart_async_is_rx_not_empty(&USART_1)) {
+//	if (usart_async_is_rx_not_empty(&USART_1)) {
 //	printf("%s",&io_descr->rx.buf[io_descr->rx.read_index]);
-		NumChars=ringbuffer_num(&io_descr->rx);
-		io_read(io_in, (uint8_t *)&buffer,NumChars);
-		buffer[NumChars]=0; //terminal string
+		//NumChars=ringbuffer_num(&io_descr->rx);
+//		NumChars=io_read(io_in, (uint8_t *)&buffer,255);
+//		buffer[NumChars]=0; //terminal string
 		//io_write(io_out, (uint8_t *)&buffer,1);
-		printf("%s",buffer);
-	} //if (usart_async_is_rx_not_empty(USART_1)) {
+//		printf("%s",buffer);
+//	} //if (usart_async_is_rx_not_empty(USART_1)) {
 	//CRITICAL_SECTION_LEAVE()
 
 }
 
+int32_t nread = 0;
+static uint8_t buffer[256];
+void USART_1_input(void)
+{
+    struct io_descriptor *io,*io_out;
+    bool willRead = false;
+    usart_async_get_io_descriptor(&USART_1, &io);	// Get the pointer to statically allocated io_descriptor structure.
+
+    if( nread <= 0 ) {
+        // Here need a semaphore (counts only to 1 in interrupt):
+        CRITICAL_SECTION_ENTER()
+        if(line_available) {
+            willRead = true;			// Accepting the semaphore count.
+            line_available = false;		// Decrementing the semaphore count from 1 to 0.
+        }								// Fast in and out with interrupts disabled.
+        CRITICAL_SECTION_LEAVE()
+        if(willRead) {
+            nread = io_read(io, buffer, sizeof(buffer));	// Returns count of characters read (or negative error flag).
+			if (nread>0) {
+				usart_sync_get_io_descriptor(&USART_0, &io_out);	// Get the pointer to statically allocated io_descriptor structure.
+				io_write(io_out,buffer,nread);
+				nread=0;
+			}
+		}
+    }
+}
 
 void usart0_receive_cb(const struct usart_async_descriptor *const io_descr)
 {
@@ -704,6 +751,9 @@ int main(void)
 	tsr=hri_gmac_read_TSR_reg(GMAC);  //bit 5 tx complete
 #endif	
 	//could test loop back send and receive: set LBL bit in NCR
+
+
+	USART_1_input();  //check for usart1 input
 
 	}  //while(1)
 
