@@ -36,6 +36,8 @@ hal\src\hal_sleep.c
 
 hal\src\hal_timer.c
 
+hal\src\hal_usart_async.c
+
 hal\src\hal_usart_sync.c
 
 hal\utils\src\utils_assert.c
@@ -43,6 +45,8 @@ hal\utils\src\utils_assert.c
 hal\utils\src\utils_event.c
 
 hal\utils\src\utils_list.c
+
+hal\utils\src\utils_ringbuffer.c
 
 hal\utils\src\utils_syscalls.c
 
@@ -68,9 +72,9 @@ hpl\pm\hpl_pm.c
 
 hpl\ramecc\hpl_ramecc.c
 
-hpl\rtc\hpl_rtc.c
-
 hpl\sercom\hpl_sercom.c
+
+hpl\tc\hpl_tc.c
 
 lwip\lwip-1.4.0\port\ethif_mac.c
 

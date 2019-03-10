@@ -12,7 +12,7 @@
 #include <hal_init.h>
 
 /*! The buffer size for USART */
-#define USART_1_BUFFER_SIZE 16
+#define USART_1_BUFFER_SIZE 256
 
 struct usart_async_descriptor USART_1;
 struct timer_descriptor       TIMER_0;

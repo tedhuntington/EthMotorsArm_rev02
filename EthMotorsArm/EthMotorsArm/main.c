@@ -68,6 +68,7 @@ uint8_t ringbuffer_last(struct ringbuffer const *const rb)
 }
 
 volatile bool line_available = false;
+//int NumCharRx=0;
 void usart1_receive_cb(const struct usart_async_descriptor *const io_descr)
 {
 //	struct io_descriptor *io_in,*io_out; 
@@ -75,12 +76,14 @@ void usart1_receive_cb(const struct usart_async_descriptor *const io_descr)
 //	int NumChars;
 	
 	/* Read transfer completed */
-	if (io_descr->rx.size>14) {
-		line_available=true;
+	//if (io_descr->rx.size>14) {
+	//	line_available=true;
+	//}
+	//Note that the ring buffer can add characters after a new line before being read from
+    if( ringbuffer_last(&io_descr->rx) == 0x0a ) {
+        line_available = true;
+		//NumCharRx=io_descr->rx.size;
 	}
-//    if( ringbuffer_last(&io_descr->rx) == 10 ) {
- //       line_available = true;
-//	}
 	
 	//printf("u1 ");
 //	usart_async_get_io_descriptor(&USART_1, &io_in);
@@ -105,6 +108,7 @@ void USART_1_input(void)
     struct io_descriptor *io,*io_out;
     bool willRead = false;
     usart_async_get_io_descriptor(&USART_1, &io);	// Get the pointer to statically allocated io_descriptor structure.
+	uint8_t MotorInst[4];
 
     if( nread <= 0 ) {
         // Here need a semaphore (counts only to 1 in interrupt):
@@ -114,15 +118,35 @@ void USART_1_input(void)
             line_available = false;		// Decrementing the semaphore count from 1 to 0.
         }								// Fast in and out with interrupts disabled.
         CRITICAL_SECTION_LEAVE()
-        if(willRead) {
-            nread = io_read(io, buffer, sizeof(buffer));	// Returns count of characters read (or negative error flag).
+        if (willRead) {
+            //nread = io_read(io, buffer, sizeof(buffer));	// Returns count of characters read (or negative error flag).
+			nread = io_read(io, buffer, sizeof(buffer));	// Returns count of characters read (or negative error flag).
+			//nread=io_read(io,buffer,NumCharRx); //only read to 0x0a- leave anything else in ring buffer
 			if (nread>0) {
-				usart_sync_get_io_descriptor(&USART_0, &io_out);	// Get the pointer to statically allocated io_descriptor structure.
-				io_write(io_out,buffer,nread);
+				//usart_sync_get_io_descriptor(&USART_0, &io_out);	// Get the pointer to statically allocated io_descriptor structure.
+				//io_write(io_out,buffer,1);
+				//printf("W: %s",buffer); //each USART packet ends with 0x0a
+				buffer[nread]=0; //terminate string
+				printf("W: %s:W\n",buffer); //each USART packet ends with 0x0a
+				//note that there is no transmit buffer (even for the synchronous driver) printf calls can overwrite the buffer currently
+
+				//tread+=nread; //incremement total read count
 				nread=0;
-			}
-		}
-    }
+				//if (tread>=9) { //end of motor instruction length
+				//Process any motor instructions
+				if (buffer[4]==ROBOT_MOTORS_SEND_4BYTE_INST) {
+					//got send a 4 byte Instruction over USART from ESP-01
+					MotorInst[0]=buffer[5];  //Motor Num<<4
+					MotorInst[1]=buffer[6];  //Dir+Strength
+					MotorInst[2]=buffer[7];  //duration low byte
+					MotorInst[3]=buffer[8];  //duration high byte
+					SendMotorInst(MotorInst);
+					//tread-=9;
+				} //if (buffer[4]==ROBOT_MOTORS_SEND_4BYTE_INST) {
+				//} //if (tread==9) {
+			} //if (nread>0) {
+		} //if(willRead) {
+    } //if( nread <= 0 ) {
 }
 
 void usart0_receive_cb(const struct usart_async_descriptor *const io_descr)
@@ -421,7 +445,7 @@ void udpserver_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_ad
 	//dst_ip = &(pcb->remote_ip); // this is zero always
 	if (p != NULL) {
 		//printf("UDP rcv %d bytes: ", (*p).len);
-		printf("%d\n", (*p).len);
+		printf("%d ", (*p).len);
 		//    	  for (i = 0; i < (*p).len; ++i)
 		//			printf("%c",((char*)(*p).payload)[i]);
 		//    	printf("\n");
