@@ -3,9 +3,9 @@ EthMotorsArm.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000c02c  00000000  00000000  00010000  2**4
+  0 .text         0000c030  00000000  00000000  00010000  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .relocate     00000074  20000000  0000c02c  00020000  2**2
+  1 .relocate     00000074  20000000  0000c030  00020000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
   2 .bkupram      00000000  47000000  47000000  00020074  2**0
                   CONTENTS
@@ -19,23 +19,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   7 .comment      00000059  00000000  00000000  000200a2  2**0
                   CONTENTS, READONLY
-  8 .debug_info   0005a78e  00000000  00000000  000200fb  2**0
+  8 .debug_info   0005a790  00000000  00000000  000200fb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 00008d51  00000000  00000000  0007a889  2**0
+  9 .debug_abbrev 00008d42  00000000  00000000  0007a88b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0001fa14  00000000  00000000  000835da  2**0
+ 10 .debug_loc    0001fa14  00000000  00000000  000835cd  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_aranges 00001670  00000000  00000000  000a2fee  2**0
+ 11 .debug_aranges 00001670  00000000  00000000  000a2fe1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00001e60  00000000  00000000  000a465e  2**0
+ 12 .debug_ranges 00001e60  00000000  00000000  000a4651  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0003b71c  00000000  00000000  000a64be  2**0
+ 13 .debug_macro  0003b71c  00000000  00000000  000a64b1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   00025e59  00000000  00000000  000e1bda  2**0
+ 14 .debug_line   00025e59  00000000  00000000  000e1bcd  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    00112fa4  00000000  00000000  00107a33  2**0
+ 15 .debug_str    00112fa4  00000000  00000000  00107a26  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00004570  00000000  00000000  0021a9d8  2**2
+ 16 .debug_frame  00004570  00000000  00000000  0021a9cc  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -95,7 +95,7 @@ Disassembly of section .text:
      27a:	bd10      	pop	{r4, pc}
      27c:	20000080 	.word	0x20000080
      280:	00000000 	.word	0x00000000
-     284:	0000c02c 	.word	0x0000c02c
+     284:	0000c030 	.word	0x0000c030
 
 00000288 <frame_dummy>:
      288:	4b0c      	ldr	r3, [pc, #48]	; (2bc <frame_dummy+0x34>)
@@ -123,9 +123,9 @@ Disassembly of section .text:
      2b8:	4718      	bx	r3
      2ba:	bf00      	nop
      2bc:	00000000 	.word	0x00000000
-     2c0:	0000c02c 	.word	0x0000c02c
+     2c0:	0000c030 	.word	0x0000c030
      2c4:	20000084 	.word	0x20000084
-     2c8:	0000c02c 	.word	0x0000c02c
+     2c8:	0000c030 	.word	0x0000c030
      2cc:	00000000 	.word	0x00000000
 
 000002d0 <atmel_start_init>:
@@ -228,7 +228,7 @@ __attribute__((always_inline)) __STATIC_INLINE void __DSB(void)
      360:	e7fe      	b.n	360 <Reset_Handler+0x70>
      362:	bf00      	nop
      364:	20000000 	.word	0x20000000
-     368:	0000c02c 	.word	0x0000c02c
+     368:	0000c030 	.word	0x0000c030
      36c:	20000074 	.word	0x20000074
      370:	200095d4 	.word	0x200095d4
      374:	20000080 	.word	0x20000080
@@ -22680,7 +22680,7 @@ void SendMotorInst(uint8_t *MInst)
     91fa:	4420      	add	r0, r4
     91fc:	2500      	movs	r5, #0
     91fe:	f880 5024 	strb.w	r5, [r0, #36]	; 0x24
-				printf("W: %s",buffer); //each USART packet ends with 0x0a
+				printf("W: %s:W\n",buffer); //each USART packet ends with 0x0a
     9202:	f104 0124 	add.w	r1, r4, #36	; 0x24
     9206:	4816      	ldr	r0, [pc, #88]	; (9260 <USART_1_input+0xac>)
     9208:	4b16      	ldr	r3, [pc, #88]	; (9264 <USART_1_input+0xb0>)
@@ -22910,18 +22910,18 @@ void SendMotorInst(uint8_t *MInst)
 			break; 
     9380:	e785      	b.n	928e <udpserver_recv+0x22>
     9382:	4770      	bx	lr
-    9384:	0000bea8 	.word	0x0000bea8
+    9384:	0000beac 	.word	0x0000beac
     9388:	00009815 	.word	0x00009815
     938c:	000054c9 	.word	0x000054c9
     9390:	200081fc 	.word	0x200081fc
     9394:	000014e9 	.word	0x000014e9
     9398:	000097ef 	.word	0x000097ef
-    939c:	0000beb4 	.word	0x0000beb4
+    939c:	0000beb8 	.word	0x0000beb8
     93a0:	00000e25 	.word	0x00000e25
     93a4:	00005531 	.word	0x00005531
     93a8:	00008601 	.word	0x00008601
     93ac:	20008284 	.word	0x20008284
-    93b0:	0000beac 	.word	0x0000beac
+    93b0:	0000beb0 	.word	0x0000beb0
     93b4:	00009115 	.word	0x00009115
 
 000093b8 <InitializeMotors>:
@@ -23348,9 +23348,9 @@ int main(void)
     9604:	200081f0 	.word	0x200081f0
     9608:	000016cd 	.word	0x000016cd
     960c:	000016a1 	.word	0x000016a1
-    9610:	0000beb8 	.word	0x0000beb8
-    9614:	0000bed4 	.word	0x0000bed4
-    9618:	0000bef0 	.word	0x0000bef0
+    9610:	0000bebc 	.word	0x0000bebc
+    9614:	0000bed8 	.word	0x0000bed8
+    9618:	0000bef4 	.word	0x0000bef4
     961c:	000098fd 	.word	0x000098fd
     9620:	2000824c 	.word	0x2000824c
     9624:	00008f9d 	.word	0x00008f9d
@@ -23360,7 +23360,7 @@ int main(void)
     9634:	200080a4 	.word	0x200080a4
     9638:	200081e8 	.word	0x200081e8
     963c:	00000c51 	.word	0x00000c51
-    9640:	0000bf08 	.word	0x0000bf08
+    9640:	0000bf0c 	.word	0x0000bf0c
     9644:	00000d91 	.word	0x00000d91
     9648:	2000828c 	.word	0x2000828c
     964c:	00005319 	.word	0x00005319
@@ -23375,15 +23375,15 @@ int main(void)
     9670:	0000926d 	.word	0x0000926d
     9674:	00008695 	.word	0x00008695
     9678:	00003e89 	.word	0x00003e89
-    967c:	0000bf28 	.word	0x0000bf28
+    967c:	0000bf2c 	.word	0x0000bf2c
     9680:	000093b9 	.word	0x000093b9
     9684:	000090e1 	.word	0x000090e1
     9688:	0000265d 	.word	0x0000265d
     968c:	000091b5 	.word	0x000091b5
     9690:	000081b5 	.word	0x000081b5
-    9694:	0000bf38 	.word	0x0000bf38
-    9698:	0000bf4c 	.word	0x0000bf4c
-    969c:	0000bf60 	.word	0x0000bf60
+    9694:	0000bf3c 	.word	0x0000bf3c
+    9698:	0000bf50 	.word	0x0000bf50
+    969c:	0000bf64 	.word	0x0000bf64
     96a0:	00009a79 	.word	0x00009a79
     96a4:	00000e25 	.word	0x00000e25
     96a8:	00004779 	.word	0x00004779
@@ -23574,7 +23574,7 @@ void stdio_redirect_init(void)
     9796:	d109      	bne.n	97ac <__libc_init_array+0x24>
     9798:	4e0b      	ldr	r6, [pc, #44]	; (97c8 <__libc_init_array+0x40>)
     979a:	4c0c      	ldr	r4, [pc, #48]	; (97cc <__libc_init_array+0x44>)
-    979c:	f002 fc36 	bl	c00c <_init>
+    979c:	f002 fc38 	bl	c010 <_init>
     97a0:	1ba4      	subs	r4, r4, r6
     97a2:	10a4      	asrs	r4, r4, #2
     97a4:	2500      	movs	r5, #0
@@ -23589,10 +23589,10 @@ void stdio_redirect_init(void)
     97ba:	4798      	blx	r3
     97bc:	3501      	adds	r5, #1
     97be:	e7f2      	b.n	97a6 <__libc_init_array+0x1e>
-    97c0:	0000c018 	.word	0x0000c018
-    97c4:	0000c018 	.word	0x0000c018
-    97c8:	0000c018 	.word	0x0000c018
-    97cc:	0000c01c 	.word	0x0000c01c
+    97c0:	0000c01c 	.word	0x0000c01c
+    97c4:	0000c01c 	.word	0x0000c01c
+    97c8:	0000c01c 	.word	0x0000c01c
+    97cc:	0000c020 	.word	0x0000c020
 
 000097d0 <memcmp>:
     97d0:	b510      	push	{r4, lr}
@@ -23731,9 +23731,9 @@ void stdio_redirect_init(void)
     98ea:	7018      	strb	r0, [r3, #0]
     98ec:	bd70      	pop	{r4, r5, r6, pc}
     98ee:	bf00      	nop
-    98f0:	0000bf98 	.word	0x0000bf98
-    98f4:	0000bfb8 	.word	0x0000bfb8
-    98f8:	0000bf78 	.word	0x0000bf78
+    98f0:	0000bf9c 	.word	0x0000bf9c
+    98f4:	0000bfbc 	.word	0x0000bfbc
+    98f8:	0000bf7c 	.word	0x0000bf7c
 
 000098fc <puts>:
     98fc:	4b02      	ldr	r3, [pc, #8]	; (9908 <puts+0xc>)
@@ -23890,9 +23890,9 @@ void stdio_redirect_init(void)
     9a64:	e7bb      	b.n	99de <setvbuf+0xc2>
     9a66:	bf00      	nop
     9a68:	20000010 	.word	0x20000010
-    9a6c:	0000bf98 	.word	0x0000bf98
-    9a70:	0000bfb8 	.word	0x0000bfb8
-    9a74:	0000bf78 	.word	0x0000bf78
+    9a6c:	0000bf9c 	.word	0x0000bf9c
+    9a70:	0000bfbc 	.word	0x0000bfbc
+    9a74:	0000bf7c 	.word	0x0000bf7c
 
 00009a78 <strlen>:
     9a78:	4603      	mov	r3, r0
@@ -23975,9 +23975,9 @@ void stdio_redirect_init(void)
     9b1a:	4638      	mov	r0, r7
     9b1c:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
     9b1e:	bf00      	nop
-    9b20:	0000bf98 	.word	0x0000bf98
-    9b24:	0000bfb8 	.word	0x0000bfb8
-    9b28:	0000bf78 	.word	0x0000bf78
+    9b20:	0000bf9c 	.word	0x0000bf9c
+    9b24:	0000bfbc 	.word	0x0000bfbc
+    9b28:	0000bf7c 	.word	0x0000bf7c
 
 00009b2c <__swsetup_r>:
     9b2c:	4b32      	ldr	r3, [pc, #200]	; (9bf8 <__swsetup_r+0xcc>)
@@ -24069,9 +24069,9 @@ void stdio_redirect_init(void)
     9bf4:	e7f7      	b.n	9be6 <__swsetup_r+0xba>
     9bf6:	bf00      	nop
     9bf8:	20000010 	.word	0x20000010
-    9bfc:	0000bf98 	.word	0x0000bf98
-    9c00:	0000bfb8 	.word	0x0000bfb8
-    9c04:	0000bf78 	.word	0x0000bf78
+    9bfc:	0000bf9c 	.word	0x0000bf9c
+    9c00:	0000bfbc 	.word	0x0000bfbc
+    9c04:	0000bf7c 	.word	0x0000bf7c
 
 00009c08 <__sflush_r>:
     9c08:	898a      	ldrh	r2, [r1, #12]
@@ -24229,9 +24229,9 @@ void stdio_redirect_init(void)
     9d5a:	2000      	movs	r0, #0
     9d5c:	bd38      	pop	{r3, r4, r5, pc}
     9d5e:	bf00      	nop
-    9d60:	0000bf98 	.word	0x0000bf98
-    9d64:	0000bfb8 	.word	0x0000bfb8
-    9d68:	0000bf78 	.word	0x0000bf78
+    9d60:	0000bf9c 	.word	0x0000bf9c
+    9d64:	0000bfbc 	.word	0x0000bfbc
+    9d68:	0000bf7c 	.word	0x0000bf7c
 
 00009d6c <_cleanup_r>:
     9d6c:	4901      	ldr	r1, [pc, #4]	; (9d74 <_cleanup_r+0x8>)
@@ -24330,7 +24330,7 @@ void stdio_redirect_init(void)
     9e3e:	2301      	movs	r3, #1
     9e40:	61a3      	str	r3, [r4, #24]
     9e42:	bd10      	pop	{r4, pc}
-    9e44:	0000bf74 	.word	0x0000bf74
+    9e44:	0000bf78 	.word	0x0000bf78
     9e48:	00009d6d 	.word	0x00009d6d
 
 00009e4c <__sfp>:
@@ -24386,7 +24386,7 @@ void stdio_redirect_init(void)
     9eba:	64a5      	str	r5, [r4, #72]	; 0x48
     9ebc:	64e5      	str	r5, [r4, #76]	; 0x4c
     9ebe:	e7e6      	b.n	9e8e <__sfp+0x42>
-    9ec0:	0000bf74 	.word	0x0000bf74
+    9ec0:	0000bf78 	.word	0x0000bf78
 
 00009ec4 <_fwalk_reent>:
     9ec4:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
@@ -24930,12 +24930,12 @@ void stdio_redirect_init(void)
     a384:	f000 f888 	bl	a498 <_printf_i>
     a388:	e7ec      	b.n	a364 <_vfiprintf_r+0x1e4>
     a38a:	bf00      	nop
-    a38c:	0000bf98 	.word	0x0000bf98
-    a390:	0000bfd8 	.word	0x0000bfd8
-    a394:	0000bfb8 	.word	0x0000bfb8
-    a398:	0000bf78 	.word	0x0000bf78
-    a39c:	0000bfde 	.word	0x0000bfde
-    a3a0:	0000bfe2 	.word	0x0000bfe2
+    a38c:	0000bf9c 	.word	0x0000bf9c
+    a390:	0000bfdc 	.word	0x0000bfdc
+    a394:	0000bfbc 	.word	0x0000bfbc
+    a398:	0000bf7c 	.word	0x0000bf7c
+    a39c:	0000bfe2 	.word	0x0000bfe2
+    a3a0:	0000bfe6 	.word	0x0000bfe6
     a3a4:	00000000 	.word	0x00000000
     a3a8:	0000a15d 	.word	0x0000a15d
 
@@ -25274,8 +25274,8 @@ void stdio_redirect_init(void)
     a6c6:	f884 3042 	strb.w	r3, [r4, #66]	; 0x42
     a6ca:	f104 0542 	add.w	r5, r4, #66	; 0x42
     a6ce:	e765      	b.n	a59c <_printf_i+0x104>
-    a6d0:	0000bffa 	.word	0x0000bffa
-    a6d4:	0000bfe9 	.word	0x0000bfe9
+    a6d0:	0000bffe 	.word	0x0000bffe
+    a6d4:	0000bfed 	.word	0x0000bfed
 
 0000a6d8 <_sbrk_r>:
     a6d8:	b538      	push	{r3, r4, r5, lr}
@@ -25954,54 +25954,55 @@ void stdio_redirect_init(void)
     be74:	00000000 74736552 69747261 4420676e     ....Restarting D
     be84:	00504348 6b6e694c 776f4420 00002e6e     HCP.Link Down...
     be94:	2e2f2e2e 69616d2f 00632e6e 25203a57     .././main.c.W: %
-    bea4:	00000073 00206425 6f746f4d 00000072     s...%d .Motor...
-    beb4:	00007325 2a2a2a2a 2a2a2a2a 2a2a2a2a     %s..************
-    bec4:	2a2a2a2a 2a2a2a2a 2a2a2a2a 000a2a2a     **************..
-    bed4:	4d687445 726f746f 6d724173 5652445f     EthMotorsArm_DRV
-    bee4:	30303838 7665725f 000a3230 65480a0d     8800_rev02....He
-    bef4:	206f6c6c 454d5441 6f57204c 21646c72     llo ATMEL World!
-    bf04:	0000000d 65687445 74656e72 6e6f4320     ....Ethernet Con
-    bf14:	7463656e 206e6f69 61747365 73696c62     nection establis
-    bf24:	00646568 50434844 61745320 64657472     hed.DHCP Started
-    bf34:	0000000d 415f5049 20524444 3a202020     ....IP_ADDR    :
-    bf44:	0d732520 0000000a 5f54454e 4b53414d      %s.....NET_MASK
-    bf54:	3a202020 0d732520 0000000a 45544147        : %s.....GATE
-    bf64:	5f594157 3a205049 0d732520 0000000a     WAY_IP : %s.....
+    bea4:	0a573a73 00000000 00206425 6f746f4d     s:W.....%d .Moto
+    beb4:	00000072 00007325 2a2a2a2a 2a2a2a2a     r...%s..********
+    bec4:	2a2a2a2a 2a2a2a2a 2a2a2a2a 2a2a2a2a     ****************
+    bed4:	000a2a2a 4d687445 726f746f 6d724173     **..EthMotorsArm
+    bee4:	5652445f 30303838 7665725f 000a3230     _DRV8800_rev02..
+    bef4:	65480a0d 206f6c6c 454d5441 6f57204c     ..Hello ATMEL Wo
+    bf04:	21646c72 0000000d 65687445 74656e72     rld!....Ethernet
+    bf14:	6e6f4320 7463656e 206e6f69 61747365      Connection esta
+    bf24:	73696c62 00646568 50434844 61745320     blished.DHCP Sta
+    bf34:	64657472 0000000d 415f5049 20524444     rted....IP_ADDR 
+    bf44:	3a202020 0d732520 0000000a 5f54454e        : %s.....NET_
+    bf54:	4b53414d 3a202020 0d732520 0000000a     MASK   : %s.....
+    bf64:	45544147 5f594157 3a205049 0d732520     GATEWAY_IP : %s.
+    bf74:	0000000a                                ....
 
-0000bf74 <_global_impure_ptr>:
-    bf74:	20000014                                ... 
+0000bf78 <_global_impure_ptr>:
+    bf78:	20000014                                ... 
 
-0000bf78 <__sf_fake_stderr>:
+0000bf7c <__sf_fake_stderr>:
 	...
 
-0000bf98 <__sf_fake_stdin>:
+0000bf9c <__sf_fake_stdin>:
 	...
 
-0000bfb8 <__sf_fake_stdout>:
+0000bfbc <__sf_fake_stdout>:
 	...
-    bfd8:	2b302d23 6c680020 6665004c 47464567     #-0+ .hlL.efgEFG
-    bfe8:	32313000 36353433 41393837 45444342     .0123456789ABCDE
-    bff8:	31300046 35343332 39383736 64636261     F.0123456789abcd
-    c008:	00006665                                ef..
+    bfdc:	2b302d23 6c680020 6665004c 47464567     #-0+ .hlL.efgEFG
+    bfec:	32313000 36353433 41393837 45444342     .0123456789ABCDE
+    bffc:	31300046 35343332 39383736 64636261     F.0123456789abcd
+    c00c:	00006665                                ef..
 
-0000c00c <_init>:
-    c00c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
-    c00e:	bf00      	nop
-    c010:	bcf8      	pop	{r3, r4, r5, r6, r7}
-    c012:	bc08      	pop	{r3}
-    c014:	469e      	mov	lr, r3
-    c016:	4770      	bx	lr
+0000c010 <_init>:
+    c010:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    c012:	bf00      	nop
+    c014:	bcf8      	pop	{r3, r4, r5, r6, r7}
+    c016:	bc08      	pop	{r3}
+    c018:	469e      	mov	lr, r3
+    c01a:	4770      	bx	lr
 
-0000c018 <__init_array_start>:
-    c018:	00000289 	.word	0x00000289
+0000c01c <__init_array_start>:
+    c01c:	00000289 	.word	0x00000289
 
-0000c01c <_fini>:
-    c01c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
-    c01e:	bf00      	nop
-    c020:	bcf8      	pop	{r3, r4, r5, r6, r7}
-    c022:	bc08      	pop	{r3}
-    c024:	469e      	mov	lr, r3
-    c026:	4770      	bx	lr
+0000c020 <_fini>:
+    c020:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    c022:	bf00      	nop
+    c024:	bcf8      	pop	{r3, r4, r5, r6, r7}
+    c026:	bc08      	pop	{r3}
+    c028:	469e      	mov	lr, r3
+    c02a:	4770      	bx	lr
 
-0000c028 <__fini_array_start>:
-    c028:	00000265 	.word	0x00000265
+0000c02c <__fini_array_start>:
+    c02c:	00000265 	.word	0x00000265
